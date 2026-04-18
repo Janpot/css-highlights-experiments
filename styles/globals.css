@@ -16,9 +16,6 @@ body {
     sans-serif;
   background: var(--page-bg);
   color: var(--page-fg);
-  transition:
-    background 150ms,
-    color 150ms;
 }
 
 main {
@@ -59,7 +56,7 @@ nav.site a {
   font-size: 14px;
 }
 
-nav.site a[aria-current='page'] {
+nav.site a[aria-current="page"] {
   font-weight: 600;
 }
 
@@ -70,12 +67,7 @@ nav.site .spacer {
 pre {
   background: var(--code-bg);
   color: var(--code-fg);
-  font-family:
-    ui-monospace,
-    SFMono-Regular,
-    Menlo,
-    Consolas,
-    monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 13px;
   line-height: 1.5;
   padding: 16px;
