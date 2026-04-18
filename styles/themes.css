@@ -1,0 +1,136 @@
+:root,
+.theme-light {
+  --page-bg: #ffffff;
+  --page-fg: #24292f;
+  --rule: #d0d7de;
+  --code-bg: #f6f8fa;
+  --code-fg: #24292f;
+  --tok-keyword: #cf222e;
+  --tok-string: #0a3069;
+  --tok-number: #0550ae;
+  --tok-bool: #0550ae;
+  --tok-null: #0550ae;
+  --tok-comment: #6e7781;
+  --tok-function: #8250df;
+  --tok-variableName: #24292f;
+  --tok-propertyName: #953800;
+  --tok-className: #953800;
+  --tok-typeName: #953800;
+  --tok-operator: #cf222e;
+  --tok-punctuation: #57606a;
+  --tok-definition: #953800;
+  --tok-regexp: #0a3069;
+  --tok-escape: #116329;
+}
+
+.theme-dark {
+  --page-bg: #0d1117;
+  --page-fg: #c9d1d9;
+  --rule: #30363d;
+  --code-bg: #161b22;
+  --code-fg: #c9d1d9;
+  --tok-keyword: #ff7b72;
+  --tok-string: #a5d6ff;
+  --tok-number: #79c0ff;
+  --tok-bool: #79c0ff;
+  --tok-null: #79c0ff;
+  --tok-comment: #8b949e;
+  --tok-function: #d2a8ff;
+  --tok-variableName: #c9d1d9;
+  --tok-propertyName: #ffa657;
+  --tok-className: #ffa657;
+  --tok-typeName: #ffa657;
+  --tok-operator: #ff7b72;
+  --tok-punctuation: #8b949e;
+  --tok-definition: #ffa657;
+  --tok-regexp: #a5d6ff;
+  --tok-escape: #7ee787;
+}
+
+.theme-dracula {
+  --page-bg: #282a36;
+  --page-fg: #f8f8f2;
+  --rule: #44475a;
+  --code-bg: #21222c;
+  --code-fg: #f8f8f2;
+  --tok-keyword: #ff79c6;
+  --tok-string: #f1fa8c;
+  --tok-number: #bd93f9;
+  --tok-bool: #bd93f9;
+  --tok-null: #bd93f9;
+  --tok-comment: #6272a4;
+  --tok-function: #50fa7b;
+  --tok-variableName: #f8f8f2;
+  --tok-propertyName: #8be9fd;
+  --tok-className: #8be9fd;
+  --tok-typeName: #8be9fd;
+  --tok-operator: #ff79c6;
+  --tok-punctuation: #f8f8f2;
+  --tok-definition: #8be9fd;
+  --tok-regexp: #f1fa8c;
+  --tok-escape: #ffb86c;
+}
+
+::highlight(tok-keyword) {
+  color: var(--tok-keyword);
+  font-weight: 600;
+}
+::highlight(tok-string) {
+  color: var(--tok-string);
+}
+::highlight(tok-number) {
+  color: var(--tok-number);
+}
+::highlight(tok-bool) {
+  color: var(--tok-bool);
+}
+::highlight(tok-null) {
+  color: var(--tok-null);
+}
+::highlight(tok-comment) {
+  color: var(--tok-comment);
+  font-style: italic;
+}
+::highlight(tok-lineComment) {
+  color: var(--tok-comment);
+  font-style: italic;
+}
+::highlight(tok-blockComment) {
+  color: var(--tok-comment);
+  font-style: italic;
+}
+::highlight(tok-function) {
+  color: var(--tok-function);
+}
+::highlight(tok-variableName) {
+  color: var(--tok-variableName);
+}
+::highlight(tok-propertyName) {
+  color: var(--tok-propertyName);
+}
+::highlight(tok-className) {
+  color: var(--tok-className);
+  font-weight: 600;
+}
+::highlight(tok-typeName) {
+  color: var(--tok-typeName);
+}
+::highlight(tok-operator) {
+  color: var(--tok-operator);
+}
+::highlight(tok-punctuation) {
+  color: var(--tok-punctuation);
+}
+::highlight(tok-definition) {
+  color: var(--tok-definition);
+  font-weight: 600;
+}
+::highlight(tok-regexp) {
+  color: var(--tok-regexp);
+}
+::highlight(tok-escape) {
+  color: var(--tok-escape);
+}
+::highlight(tok-meta) {
+  color: var(--tok-comment);
+}
