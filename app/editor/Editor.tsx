@@ -1,47 +1,58 @@
 'use client';
-import { useMemo, useRef, useState } from 'react';
+import { FormEvent, useMemo, useRef, useState } from 'react';
 import { parser } from '@lezer/javascript';
 import {
   computeHighlights,
   rangesFromTree,
   parseIncremental,
   applyEdit,
+  type CompactRange,
+  type ParseState,
 } from '@/lib/highlight';
 import { useCodeBlock } from '@/lib/useCodeBlock';
 
-function escapeHtml(s) {
+function escapeHtml(s: string): string {
   return s
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;');
 }
 
-export default function Editor({ initialCode }) {
-  const ref = useRef(null);
+export default function Editor({ initialCode }: { initialCode: string }) {
+  const ref = useRef<HTMLElement>(null);
   const [incremental, setIncremental] = useState(true);
   const [code, setCode] = useState(initialCode);
-  const [ranges, setRanges] = useState(() => computeHighlights(parser, initialCode));
-  const [lastParseMs, setLastParseMs] = useState(null);
+  const [ranges, setRanges] = useState<CompactRange[]>(() =>
+    computeHighlights(parser, initialCode),
+  );
+  const [lastParseMs, setLastParseMs] = useState<number | null>(null);
 
-  const parseStateRef = useRef(null);
+  const parseStateRef = useRef<ParseState | null>(null);
 
-  const initialHtml = useMemo(() => ({ __html: escapeHtml(initialCode) }), [initialCode]);
+  const initialHtml = useMemo(
+    () => ({ __html: escapeHtml(initialCode) }),
+    [initialCode],
+  );
 
   useCodeBlock(ref, { code, ranges });
 
-  function handleInput(e) {
+  function handleInput(e: FormEvent<HTMLElement>) {
     const nextCode = e.currentTarget.textContent ?? '';
     const t0 = performance.now();
-    let nextRanges;
+    let nextRanges: CompactRange[];
     if (incremental) {
-      let state = parseStateRef.current;
+      const state = parseStateRef.current;
       if (!state) {
         const { tree, fragments } = parseIncremental(parser, nextCode);
         parseStateRef.current = { code: nextCode, fragments };
         nextRanges = rangesFromTree(tree);
       } else {
         const edited = applyEdit(state, nextCode);
-        const { tree, fragments } = parseIncremental(parser, nextCode, edited.fragments);
+        const { tree, fragments } = parseIncremental(
+          parser,
+          nextCode,
+          edited.fragments,
+        );
         parseStateRef.current = { code: nextCode, fragments };
         nextRanges = rangesFromTree(tree);
       }

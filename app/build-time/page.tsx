@@ -7,13 +7,20 @@ import {
   LINKED_CODE,
   LINKED_SEGMENTS,
   makeLongCode,
+  type Segment,
 } from './samples';
 
 export const dynamic = 'force-static';
 
+interface Block {
+  title: string;
+  code: string;
+  segments?: Segment[];
+}
+
 export default function Page() {
   const longCode = makeLongCode(40);
-  const blocks = [
+  const blocks: Block[] = [
     { title: 'Short', code: SHORT_CODE },
     { title: 'Medium', code: MEDIUM_CODE },
     {
@@ -22,7 +29,11 @@ export default function Page() {
       segments: LINKED_SEGMENTS,
     },
     { title: 'Long (viewport-only)', code: longCode },
-  ].map((b) => ({ ...b, ranges: computeHighlights(parser, b.code) }));
+  ];
+  const prepared = blocks.map((b) => ({
+    ...b,
+    ranges: computeHighlights(parser, b.code),
+  }));
 
   return (
     <>
@@ -32,7 +43,7 @@ export default function Page() {
         ranges array across the client boundary. The parser never ships to the
         browser.
       </p>
-      {blocks.map((b, i) => (
+      {prepared.map((b, i) => (
         <section key={i}>
           <h2>{b.title}</h2>
           <CodeBlock code={b.code} ranges={b.ranges} segments={b.segments} />

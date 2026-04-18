@@ -38,9 +38,6 @@ counter.subscribe((next) => console.log('count:', next));
 counter.set((n) => n + 1);
 `;
 
-// The medium sample with a link in the middle: see LINKED_SEGMENTS below.
-// The parsed source must equal the concatenation of all segment texts.
-
 export const LINKED_CODE = `// The Lezer parser docs live at https://lezer.codemirror.net
 // Anchor above is a real clickable link inside the code block.
 import { parser } from '@lezer/javascript';
@@ -49,21 +46,24 @@ const tree = parser.parse('const x = 42');
 console.log(tree.toString());
 `;
 
+export interface Segment {
+  text: string;
+  href?: string;
+}
+
 const LINK_URL = 'https://lezer.codemirror.net';
 const LINK_TEXT = 'https://lezer.codemirror.net';
 const linkStart = LINKED_CODE.indexOf(LINK_TEXT);
 const linkEnd = linkStart + LINK_TEXT.length;
 
-export const LINKED_SEGMENTS = [
+export const LINKED_SEGMENTS: Segment[] = [
   { text: LINKED_CODE.slice(0, linkStart) },
   { text: LINKED_CODE.slice(linkStart, linkEnd), href: LINK_URL },
   { text: LINKED_CODE.slice(linkEnd) },
 ];
 
-// Generate a long sample by concatenating (unique) copies of the medium sample
-// with varied identifier names, so the viewport-only logic has something to do.
-export function makeLongCode(copies = 40) {
-  const out = [];
+export function makeLongCode(copies = 40): string {
+  const out: string[] = [];
   for (let i = 0; i < copies; i++) {
     const body = MEDIUM_CODE.replaceAll('Store', 'Store' + i).replaceAll(
       'counter',

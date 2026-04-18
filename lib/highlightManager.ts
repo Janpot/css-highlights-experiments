@@ -2,25 +2,29 @@ const supported =
   typeof CSS !== 'undefined' &&
   'highlights' in CSS &&
   typeof window !== 'undefined' &&
-  typeof window.Highlight !== 'undefined';
+  typeof (window as unknown as { Highlight?: unknown }).Highlight !==
+    'undefined';
 
-const highlights = new Map();
-const blockRanges = new Map();
+const highlights = new Map<string, Highlight>();
+const blockRanges = new Map<number, Map<string, Set<Range>>>();
 
-function ensure(cls) {
+function ensure(cls: string): Highlight {
   let h = highlights.get(cls);
   if (!h) {
-    h = new window.Highlight();
+    h = new Highlight();
     highlights.set(cls, h);
     CSS.highlights.set(cls, h);
   }
   return h;
 }
 
-export function setBlockActiveRanges(blockId, perClass) {
+export function setBlockActiveRanges(
+  blockId: number,
+  perClass: Map<string, Range[]>,
+): void {
   if (!supported) return;
   clearBlock(blockId);
-  const store = new Map();
+  const store = new Map<string, Set<Range>>();
   for (const [cls, rs] of perClass) {
     const h = ensure(cls);
     const set = new Set(rs);
@@ -30,7 +34,7 @@ export function setBlockActiveRanges(blockId, perClass) {
   blockRanges.set(blockId, store);
 }
 
-export function clearBlock(blockId) {
+export function clearBlock(blockId: number): void {
   if (!supported) return;
   const prev = blockRanges.get(blockId);
   if (!prev) return;
@@ -42,6 +46,6 @@ export function clearBlock(blockId) {
   blockRanges.delete(blockId);
 }
 
-export function isSupported() {
+export function isSupported(): boolean {
   return supported;
 }

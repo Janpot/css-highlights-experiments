@@ -1,13 +1,19 @@
 'use client';
-import { useEffect, useMemo, useRef } from 'react';
+import { RefObject, useEffect, useMemo, useRef } from 'react';
 import { computeLineStarts, visibleOffsetWindow } from './lineIndex';
-import { buildTextNodeIndex, makeRange } from './domIndex';
+import { buildTextNodeIndex, makeRange, TextNodeIndex } from './domIndex';
 import { setBlockActiveRanges, clearBlock, isSupported } from './highlightManager';
+import type { CompactRange } from './highlight';
 
-let sharedObserver = null;
-const observerCallbacks = new WeakMap();
+interface ObserverCallbacks {
+  onEnter: () => void;
+  onLeave: () => void;
+}
 
-function getSharedObserver() {
+let sharedObserver: IntersectionObserver | null = null;
+const observerCallbacks = new WeakMap<Element, ObserverCallbacks>();
+
+function getSharedObserver(): IntersectionObserver {
   if (sharedObserver) return sharedObserver;
   sharedObserver = new IntersectionObserver(
     (entries) => {
@@ -23,7 +29,11 @@ function getSharedObserver() {
   return sharedObserver;
 }
 
-function observeBlock(el, onEnter, onLeave) {
+function observeBlock(
+  el: Element,
+  onEnter: () => void,
+  onLeave: () => void,
+): () => void {
   const io = getSharedObserver();
   observerCallbacks.set(el, { onEnter, onLeave });
   io.observe(el);
@@ -33,24 +43,29 @@ function observeBlock(el, onEnter, onLeave) {
   };
 }
 
-function firstPairIdxGte(entry, windowStart) {
+function firstPairIdxGte(entry: CompactRange, windowStart: number): number {
   const pairs = (entry.length - 1) >> 1;
   let lo = 0;
   let hi = pairs;
   while (lo < hi) {
     const mid = (lo + hi) >>> 1;
-    if (entry[1 + mid * 2] < windowStart) lo = mid + 1;
+    if ((entry[1 + mid * 2] as number) < windowStart) lo = mid + 1;
     else hi = mid;
   }
   return lo;
 }
 
-function buildPerClassRanges(nodeIndex, ranges, windowStart, windowEnd) {
-  const perClass = new Map();
+function buildPerClassRanges(
+  nodeIndex: TextNodeIndex,
+  ranges: CompactRange[],
+  windowStart: number,
+  windowEnd: number,
+): Map<string, Range[]> {
+  const perClass = new Map<string, Range[]>();
   if (!nodeIndex.total) return perClass;
 
   for (const entry of ranges) {
-    const token = entry[0];
+    const token = entry[0] as string;
     const classes = token.split(/\s+/).filter(Boolean);
     if (!classes.length) continue;
 
@@ -58,9 +73,9 @@ function buildPerClassRanges(nodeIndex, ranges, windowStart, windowEnd) {
     const pairs = (entry.length - 1) >> 1;
 
     for (let p = startIdx; p < pairs; p++) {
-      const s = entry[1 + p * 2];
+      const s = entry[1 + p * 2] as number;
       if (s >= windowEnd) break;
-      const len = entry[2 + p * 2];
+      const len = entry[2 + p * 2] as number;
       const e = s + len;
       if (e <= windowStart) continue;
 
@@ -81,15 +96,30 @@ function buildPerClassRanges(nodeIndex, ranges, windowStart, windowEnd) {
   return perClass;
 }
 
+interface UseCodeBlockOptions {
+  ranges: CompactRange[];
+  code: string;
+  buffer?: number;
+}
+
+interface BlockState {
+  ranges: CompactRange[];
+  lineStarts: number[];
+  nodeIndex: TextNodeIndex | null;
+}
+
 let nextId = 0;
 
-export function useCodeBlock(codeRef, { ranges, code, buffer = 30 } = {}) {
-  const blockIdRef = useRef(null);
+export function useCodeBlock(
+  codeRef: RefObject<HTMLElement | null>,
+  { ranges, code, buffer = 30 }: UseCodeBlockOptions,
+): void {
+  const blockIdRef = useRef<number | null>(null);
   if (blockIdRef.current == null) blockIdRef.current = ++nextId;
 
   const lineStarts = useMemo(() => computeLineStarts(code), [code]);
 
-  const stateRef = useRef({ ranges, lineStarts, nodeIndex: null });
+  const stateRef = useRef<BlockState>({ ranges, lineStarts, nodeIndex: null });
   stateRef.current.ranges = ranges;
   stateRef.current.lineStarts = lineStarts;
 
@@ -98,7 +128,7 @@ export function useCodeBlock(codeRef, { ranges, code, buffer = 30 } = {}) {
     const el = codeRef.current;
     if (!el) return;
 
-    const blockId = blockIdRef.current;
+    const blockId = blockIdRef.current!;
     stateRef.current.nodeIndex = buildTextNodeIndex(el);
 
     let visible = false;
@@ -148,7 +178,7 @@ export function useCodeBlock(codeRef, { ranges, code, buffer = 30 } = {}) {
     const el = codeRef.current;
     if (!el) return;
     stateRef.current.nodeIndex = buildTextNodeIndex(el);
-    const blockId = blockIdRef.current;
+    const blockId = blockIdRef.current!;
     const { lineStarts: ls, ranges: rs, nodeIndex } = stateRef.current;
     if (!nodeIndex) return;
     const [ws, we] = visibleOffsetWindow(el, ls, buffer);

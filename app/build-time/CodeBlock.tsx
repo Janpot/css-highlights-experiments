@@ -1,9 +1,17 @@
 'use client';
 import { useRef } from 'react';
 import { useCodeBlock } from '@/lib/useCodeBlock';
+import type { CompactRange } from '@/lib/highlight';
+import type { Segment } from './samples';
 
-export default function CodeBlock({ code, ranges, segments }) {
-  const ref = useRef(null);
+interface Props {
+  code: string;
+  ranges: CompactRange[];
+  segments?: Segment[];
+}
+
+export default function CodeBlock({ code, ranges, segments }: Props) {
+  const ref = useRef<HTMLElement>(null);
   useCodeBlock(ref, { code, ranges });
   return (
     <pre>

@@ -1,4 +1,4 @@
-export function computeLineStarts(code) {
+export function computeLineStarts(code: string): number[] {
   const starts = [0];
   for (let i = 0; i < code.length; i++) {
     if (code.charCodeAt(i) === 10) starts.push(i + 1);
@@ -6,7 +6,11 @@ export function computeLineStarts(code) {
   return starts;
 }
 
-export function visibleOffsetWindow(codeEl, lineStarts, buffer = 30) {
+export function visibleOffsetWindow(
+  codeEl: HTMLElement,
+  lineStarts: number[],
+  buffer = 30,
+): [number, number] {
   const rect = codeEl.getBoundingClientRect();
   const vh = window.innerHeight || document.documentElement.clientHeight;
   const lh = parseFloat(getComputedStyle(codeEl).lineHeight) || 16;

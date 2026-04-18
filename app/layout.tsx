@@ -1,13 +1,15 @@
 import '@/styles/globals.css';
 import '@/styles/themes.css';
+import type { ReactNode } from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import ThemeSwitcher from './ThemeSwitcher';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Lezer + CSS Custom Highlight API',
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className="theme-light">
       <body>

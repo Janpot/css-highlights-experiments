@@ -1,15 +1,18 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-const THEMES = ['theme-light', 'theme-dark', 'theme-dracula'];
+const THEMES = ['theme-light', 'theme-dark', 'theme-dracula'] as const;
+type Theme = (typeof THEMES)[number];
 const STORAGE_KEY = 'highlight-demo-theme';
 
 export default function ThemeSwitcher() {
-  const [theme, setTheme] = useState('theme-light');
+  const [theme, setTheme] = useState<Theme>('theme-light');
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved && THEMES.includes(saved)) setTheme(saved);
+    if (saved && (THEMES as readonly string[]).includes(saved)) {
+      setTheme(saved as Theme);
+    }
   }, []);
 
   useEffect(() => {
@@ -23,7 +26,7 @@ export default function ThemeSwitcher() {
     <select
       className="theme"
       value={theme}
-      onChange={(e) => setTheme(e.target.value)}
+      onChange={(e) => setTheme(e.target.value as Theme)}
       aria-label="Theme"
     >
       <option value="theme-light">Light</option>
