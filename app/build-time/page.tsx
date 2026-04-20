@@ -1,5 +1,6 @@
 import { parser } from '@lezer/javascript';
 import { computeHighlights } from '@/lib/highlight';
+import { encodeRanges, flattenRanges } from '@/lib/rangesCodec';
 import CodeBlock from './CodeBlock';
 import {
   SHORT_CODE,
@@ -32,7 +33,7 @@ export default function Page() {
   ];
   const prepared = blocks.map((b) => ({
     ...b,
-    ranges: computeHighlights(parser, b.code),
+    ranges: encodeRanges(flattenRanges(computeHighlights(parser, b.code))),
   }));
 
   return (

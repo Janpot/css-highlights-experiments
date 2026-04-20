@@ -14,6 +14,9 @@
   --lzh-cmt: #6e7781;
   --lzh-var: #24292f;
   --lzh-prop: #953800;
+  --lzh-fn: #8250df;
+  --lzh-def: #0969da;
+  --lzh-std: #0550ae;
   --lzh-cls: #953800;
   --lzh-type: #953800;
   --lzh-op: #cf222e;
@@ -38,6 +41,9 @@
   --lzh-cmt: #8b949e;
   --lzh-var: #c9d1d9;
   --lzh-prop: #ffa657;
+  --lzh-fn: #d2a8ff;
+  --lzh-def: #79c0ff;
+  --lzh-std: #79c0ff;
   --lzh-cls: #ffa657;
   --lzh-type: #ffa657;
   --lzh-op: #ff7b72;
@@ -62,6 +68,9 @@
   --lzh-cmt: #6272a4;
   --lzh-var: #f8f8f2;
   --lzh-prop: #8be9fd;
+  --lzh-fn: #50fa7b;
+  --lzh-def: #50fa7b;
+  --lzh-std: #bd93f9;
   --lzh-cls: #8be9fd;
   --lzh-type: #8be9fd;
   --lzh-op: #ff79c6;
@@ -102,6 +111,15 @@
 }
 ::highlight(lzh-prop) {
   color: var(--lzh-prop);
+}
+::highlight(lzh-fn) {
+  color: var(--lzh-fn);
+}
+::highlight(lzh-def) {
+  color: var(--lzh-def);
+}
+::highlight(lzh-std) {
+  color: var(--lzh-std);
 }
 ::highlight(lzh-cls) {
   color: var(--lzh-cls);

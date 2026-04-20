@@ -8,10 +8,13 @@ const supported =
 const highlights = new Map<string, Highlight>();
 const blockRanges = new Map<number, Map<string, Set<Range>>>();
 
+const SPECIFIC = new Set(['lzh-fn', 'lzh-def', 'lzh-std', 'lzh-cls', 'lzh-type']);
+
 function ensure(cls: string): Highlight {
   let h = highlights.get(cls);
   if (!h) {
     h = new Highlight();
+    if (SPECIFIC.has(cls)) h.priority = 1;
     highlights.set(cls, h);
     CSS.highlights.set(cls, h);
   }

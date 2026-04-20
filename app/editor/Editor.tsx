@@ -10,6 +10,7 @@ import {
   type ParseState,
 } from '@/lib/highlight';
 import { useCodeBlock } from '@/lib/useCodeBlock';
+import { flattenRanges } from '@/lib/rangesCodec';
 
 function escapeHtml(s: string): string {
   return s
@@ -34,7 +35,8 @@ export default function Editor({ initialCode }: { initialCode: string }) {
     [initialCode],
   );
 
-  useCodeBlock(ref, { code, ranges });
+  const flatRanges = useMemo(() => flattenRanges(ranges), [ranges]);
+  useCodeBlock(ref, flatRanges);
 
   function handleInput(e: FormEvent<HTMLElement>) {
     const nextCode = e.currentTarget.textContent ?? '';
