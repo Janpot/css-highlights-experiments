@@ -23,6 +23,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <Link href="/build-time">Build-time</Link>
           <Link href="/client-runtime">Client runtime</Link>
           <Link href="/editor">Editor</Link>
+          <Link href="/mui">MUI</Link>
           <span className="spacer" />
           <ThemeSwitcher />
         </nav>

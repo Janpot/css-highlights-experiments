@@ -109,11 +109,31 @@ label.toggle {
   cursor: pointer;
 }
 
-select.theme {
-  font: inherit;
-  padding: 4px 8px;
-  border-radius: 4px;
+.theme-switcher {
+  display: inline-flex;
+  gap: 4px;
   border: 1px solid var(--rule);
-  background: var(--page-bg);
+  border-radius: 6px;
+  padding: 2px;
+}
+.theme-switcher button {
+  font: inherit;
+  font-size: 12px;
+  padding: 2px 8px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
   color: var(--page-fg);
+  cursor: pointer;
+  opacity: 0.55;
+}
+.theme-switcher button:hover {
+  opacity: 0.85;
+}
+.theme-light .theme-switcher button[data-theme='theme-light'],
+.theme-dark .theme-switcher button[data-theme='theme-dark'],
+.theme-dracula .theme-switcher button[data-theme='theme-dracula'] {
+  background: var(--rule);
+  opacity: 1;
+  font-weight: 600;
 }
