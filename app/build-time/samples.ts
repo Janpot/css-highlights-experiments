@@ -46,22 +46,6 @@ const tree = parser.parse('const x = 42');
 console.log(tree.toString());
 `;
 
-export interface Segment {
-  text: string;
-  href?: string;
-}
-
-const LINK_URL = 'https://lezer.codemirror.net';
-const LINK_TEXT = 'https://lezer.codemirror.net';
-const linkStart = LINKED_CODE.indexOf(LINK_TEXT);
-const linkEnd = linkStart + LINK_TEXT.length;
-
-export const LINKED_SEGMENTS: Segment[] = [
-  { text: LINKED_CODE.slice(0, linkStart) },
-  { text: LINKED_CODE.slice(linkStart, linkEnd), href: LINK_URL },
-  { text: LINKED_CODE.slice(linkEnd) },
-];
-
 export function makeLongCode(copies = 40): string {
   const out: string[] = [];
   for (let i = 0; i < copies; i++) {
