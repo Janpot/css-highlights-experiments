@@ -5,6 +5,7 @@
   --rule: #d0d7de;
   --code-bg: #f6f8fa;
   --code-fg: #24292f;
+  --link: #0969da;
   --lzh-kw: #cf222e;
   --lzh-str: #0a3069;
   --lzh-num: #0550ae;
@@ -28,6 +29,7 @@
   --rule: #30363d;
   --code-bg: #161b22;
   --code-fg: #c9d1d9;
+  --link: #58a6ff;
   --lzh-kw: #ff7b72;
   --lzh-str: #a5d6ff;
   --lzh-num: #79c0ff;
@@ -51,6 +53,7 @@
   --rule: #44475a;
   --code-bg: #21222c;
   --code-fg: #f8f8f2;
+  --link: #8be9fd;
   --lzh-kw: #ff79c6;
   --lzh-str: #f1fa8c;
   --lzh-num: #bd93f9;

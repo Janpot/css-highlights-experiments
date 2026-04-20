@@ -38,6 +38,11 @@ p {
   line-height: 1.5;
 }
 
+a,
+a:visited {
+  color: var(--link);
+}
+
 nav.site {
   display: flex;
   gap: 16px;
