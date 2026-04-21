@@ -14,6 +14,10 @@ export default function Home() {
           component at build time.
         </li>
         <li>
+          <a href="/build-time-raw">/build-time-raw</a> — same, but ranges
+          cross the client boundary uncompressed (no varint/base64).
+        </li>
+        <li>
           <a href="/client-runtime">/client-runtime</a> — server ships raw code,
           browser parses on mount.
         </li>

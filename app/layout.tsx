@@ -21,6 +21,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <nav className="site">
           <Link href="/">Home</Link>
           <Link href="/build-time">Build-time</Link>
+          <Link href="/build-time-raw">Build-time (raw)</Link>
           <Link href="/client-runtime">Client runtime</Link>
           <Link href="/editor">Editor</Link>
           <Link href="/mui">MUI</Link>
