@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { parser } from '@lezer/javascript';
 import { computeHighlights } from '@/lib/highlight';
-import { flattenRanges } from '@/lib/rangesCodec';
+import { encodeRanges } from '@/lib/rangesCodec';
 import CodeBlock from './CodeBlock';
 import {
   SHORT_CODE,
@@ -57,21 +57,20 @@ export default function Page() {
       code: LINKED_CODE,
       enhance: linkify,
     },
-    { title: 'Long (viewport-only)', code: longCode },
+    { title: 'Long', code: longCode },
   ];
   const prepared = blocks.map((b) => ({
     ...b,
-    ranges: flattenRanges(computeHighlights(parser, b.code)),
+    ranges: encodeRanges(computeHighlights(parser, b.code)),
   }));
 
   return (
     <>
-      <h1>Build-time highlighting (uncompressed)</h1>
+      <h1>Build-time highlighting (compressed)</h1>
       <p>
-        Same as <a href="/build-time">/build-time</a>, but the flattened ranges
-        (class list + token number array) are serialized by React as-is across
-        the client boundary — no varint / base64 packing. Compare the RSC
-        payload size to the compressed version.
+        Same as <a href="/build-time">/build-time</a>, but with compression: the
+        ranges are varint-packed and base64-encoded before crossing the client
+        boundary, and decoded in the browser. Compare the RSC payload size.
       </p>
       {prepared.map((b, i) => (
         <section key={i}>

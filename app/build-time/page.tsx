@@ -1,11 +1,10 @@
-import type { ReactNode } from "react";
-import { parser } from "@lezer/javascript";
-import { computeHighlights } from "@/lib/highlight";
-import { encodeRanges, flattenRanges } from "@/lib/rangesCodec";
-import CodeBlock from "./CodeBlock";
-import { SHORT_CODE, MEDIUM_CODE, LINKED_CODE, makeLongCode } from "./samples";
+import type { ReactNode } from 'react';
+import { parser } from '@lezer/javascript';
+import { computeHighlights } from '@/lib/highlight';
+import CodeBlock from './CodeBlock';
+import { SHORT_CODE, MEDIUM_CODE, LINKED_CODE, makeLongCode } from './samples';
 
-export const dynamic = "force-static";
+export const dynamic = 'force-static';
 
 const URL_RE = /https?:\/\/[^\s'"<>()]+/g;
 const TRAILING_PUNCT = /[.,;:!?)\]}]+$/;
@@ -45,27 +44,27 @@ interface Block {
 export default function Page() {
   const longCode = makeLongCode(40);
   const blocks: Block[] = [
-    { title: "Short", code: SHORT_CODE },
-    { title: "Medium", code: MEDIUM_CODE },
+    { title: 'Short', code: SHORT_CODE },
+    { title: 'Medium', code: MEDIUM_CODE },
     {
-      title: "With a nested link",
+      title: 'With a nested link',
       code: LINKED_CODE,
       enhance: linkify,
     },
-    { title: "Long (viewport-only)", code: longCode },
+    { title: 'Long', code: longCode },
   ];
   const prepared = blocks.map((b) => ({
     ...b,
-    ranges: encodeRanges(flattenRanges(computeHighlights(parser, b.code))),
+    ranges: computeHighlights(parser, b.code),
   }));
 
   return (
     <>
       <h1>Build-time highlighting</h1>
       <p>
-        Server component parses the code at build time and passes a compact
-        ranges array across the client boundary. The parser never ships to the
-        browser.
+        Server component parses the code at build time and passes the ranges
+        array across the client boundary as a plain object. The parser never
+        ships to the browser.
       </p>
       {prepared.map((b, i) => (
         <section key={i}>

@@ -11,11 +11,12 @@ export default function Home() {
       <ul>
         <li>
           <a href="/build-time">/build-time</a> — ranges computed in a server
-          component at build time.
+          component at build time; serialized across the client boundary as a
+          plain object.
         </li>
         <li>
-          <a href="/build-time-raw">/build-time-raw</a> — same, but ranges
-          cross the client boundary uncompressed (no varint/base64).
+          <a href="/build-time-compressed">/build-time-compressed</a> — same,
+          but ranges are varint+base64 compressed to shrink the RSC payload.
         </li>
         <li>
           <a href="/client-runtime">/client-runtime</a> — server ships raw code,

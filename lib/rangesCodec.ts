@@ -1,5 +1,3 @@
-import type { CompactRange } from './highlight';
-
 export interface RangesData {
   classes: string[];
   tokens: number[];
@@ -35,35 +33,6 @@ function base64ToBytes(data: string): Uint8Array {
     return out;
   }
   return new Uint8Array(Buffer.from(data, 'base64'));
-}
-
-export function flattenRanges(ranges: CompactRange[]): RangesData {
-  const classes: string[] = [];
-  const classIndex = new Map<string, number>();
-  const tokens: number[] = [];
-
-  for (const entry of ranges) {
-    const cls = entry[0] as string;
-    const pairCount = (entry.length - 1) >> 1;
-    if (pairCount === 0) continue;
-
-    let idx = classIndex.get(cls);
-    if (idx === undefined) {
-      idx = classes.length;
-      classes.push(cls);
-      classIndex.set(cls, idx);
-    }
-
-    tokens.push(idx, pairCount);
-    let prev = 0;
-    for (let i = 0; i < pairCount; i++) {
-      const from = entry[1 + i * 2] as number;
-      const len = entry[2 + i * 2] as number;
-      tokens.push(from - prev, len);
-      prev = from;
-    }
-  }
-  return { classes, tokens };
 }
 
 export function encodeRanges({ classes, tokens }: RangesData): EncodedRanges {

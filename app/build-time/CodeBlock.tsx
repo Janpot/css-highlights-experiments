@@ -1,17 +1,16 @@
 'use client';
 import { ReactNode, useRef } from 'react';
-import { useCodeBlock, useDecodedRanges } from '@/lib/useCodeBlock';
-import type { EncodedRanges } from '@/lib/rangesCodec';
+import { useCodeBlock } from '@/lib/useCodeBlock';
+import type { RangesData } from '@/lib/rangesCodec';
 
 interface Props {
   code: ReactNode;
-  ranges: EncodedRanges;
+  ranges: RangesData;
 }
 
 export default function CodeBlock({ code, ranges }: Props) {
   const ref = useRef<HTMLElement>(null);
-  const decoded = useDecodedRanges(ranges);
-  useCodeBlock(ref, decoded);
+  useCodeBlock(ref, ranges);
   return (
     <pre>
       <code ref={ref}>{code}</code>

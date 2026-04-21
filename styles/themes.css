@@ -1,56 +1,40 @@
 :root,
 .theme-light {
   --page-bg: #ffffff;
-  --page-fg: #24292f;
+  --page-fg: #1f2328;
   --rule: #d0d7de;
   --code-bg: #f6f8fa;
-  --code-fg: #24292f;
+  --code-fg: #1f2328;
   --link: #0969da;
   --lzh-kw: #cf222e;
+  --lzh-this: #0550ae;
   --lzh-str: #0a3069;
   --lzh-num: #0550ae;
   --lzh-bool: #0550ae;
   --lzh-nul: #0550ae;
-  --lzh-cmt: #6e7781;
-  --lzh-var: #24292f;
-  --lzh-prop: #953800;
-  --lzh-fn: #8250df;
-  --lzh-def: #0969da;
-  --lzh-std: #0550ae;
-  --lzh-cls: #953800;
-  --lzh-type: #953800;
-  --lzh-op: #cf222e;
-  --lzh-punct: #57606a;
+  --lzh-cmt: #59636e;
+  --lzh-fn: #6639ba;
   --lzh-re: #0a3069;
   --lzh-esc: #116329;
-  --lzh-meta: #6e7781;
 }
 
 .theme-dark {
   --page-bg: #0d1117;
-  --page-fg: #c9d1d9;
+  --page-fg: #f0f6fc;
   --rule: #30363d;
   --code-bg: #161b22;
-  --code-fg: #c9d1d9;
+  --code-fg: #f0f6fc;
   --link: #58a6ff;
   --lzh-kw: #ff7b72;
+  --lzh-this: #79c0ff;
   --lzh-str: #a5d6ff;
   --lzh-num: #79c0ff;
   --lzh-bool: #79c0ff;
   --lzh-nul: #79c0ff;
-  --lzh-cmt: #8b949e;
-  --lzh-var: #c9d1d9;
-  --lzh-prop: #ffa657;
+  --lzh-cmt: #9198a1;
   --lzh-fn: #d2a8ff;
-  --lzh-def: #79c0ff;
-  --lzh-std: #79c0ff;
-  --lzh-cls: #ffa657;
-  --lzh-type: #ffa657;
-  --lzh-op: #ff7b72;
-  --lzh-punct: #8b949e;
   --lzh-re: #a5d6ff;
   --lzh-esc: #7ee787;
-  --lzh-meta: #8b949e;
 }
 
 .theme-dracula {
@@ -61,28 +45,25 @@
   --code-fg: #f8f8f2;
   --link: #8be9fd;
   --lzh-kw: #ff79c6;
+  --lzh-this: #bd93f9;
   --lzh-str: #f1fa8c;
   --lzh-num: #bd93f9;
   --lzh-bool: #bd93f9;
   --lzh-nul: #bd93f9;
   --lzh-cmt: #6272a4;
-  --lzh-var: #f8f8f2;
-  --lzh-prop: #8be9fd;
   --lzh-fn: #50fa7b;
-  --lzh-def: #50fa7b;
-  --lzh-std: #bd93f9;
-  --lzh-cls: #8be9fd;
-  --lzh-type: #8be9fd;
-  --lzh-op: #ff79c6;
-  --lzh-punct: #f8f8f2;
   --lzh-re: #f1fa8c;
   --lzh-esc: #ffb86c;
-  --lzh-meta: #6272a4;
 }
 
 ::highlight(lzh-kw) {
   color: var(--lzh-kw);
-  font-weight: 600;
+}
+::highlight(lzh-this) {
+  color: var(--lzh-this);
+}
+::highlight(lzh-const) {
+  color: var(--lzh-this);
 }
 ::highlight(lzh-str) {
   color: var(--lzh-str);
@@ -104,36 +85,7 @@
 }
 ::highlight(lzh-cmt) {
   color: var(--lzh-cmt);
-  font-style: italic;
-}
-::highlight(lzh-var) {
-  color: var(--lzh-var);
-}
-::highlight(lzh-prop) {
-  color: var(--lzh-prop);
 }
 ::highlight(lzh-fn) {
   color: var(--lzh-fn);
-}
-::highlight(lzh-def) {
-  color: var(--lzh-def);
-}
-::highlight(lzh-std) {
-  color: var(--lzh-std);
-}
-::highlight(lzh-cls) {
-  color: var(--lzh-cls);
-  font-weight: 600;
-}
-::highlight(lzh-type) {
-  color: var(--lzh-type);
-}
-::highlight(lzh-op) {
-  color: var(--lzh-op);
-}
-::highlight(lzh-punct) {
-  color: var(--lzh-punct);
-}
-::highlight(lzh-meta) {
-  color: var(--lzh-meta);
 }

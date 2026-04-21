@@ -6,11 +6,10 @@ import {
   rangesFromTree,
   parseIncremental,
   applyEdit,
-  type CompactRange,
   type ParseState,
 } from '@/lib/highlight';
 import { useCodeBlock } from '@/lib/useCodeBlock';
-import { flattenRanges } from '@/lib/rangesCodec';
+import type { RangesData } from '@/lib/rangesCodec';
 
 function escapeHtml(s: string): string {
   return s
@@ -23,7 +22,7 @@ export default function Editor({ initialCode }: { initialCode: string }) {
   const ref = useRef<HTMLElement>(null);
   const [incremental, setIncremental] = useState(true);
   const [code, setCode] = useState(initialCode);
-  const [ranges, setRanges] = useState<CompactRange[]>(() =>
+  const [ranges, setRanges] = useState<RangesData>(() =>
     computeHighlights(parser, initialCode),
   );
   const [lastParseMs, setLastParseMs] = useState<number | null>(null);
@@ -35,19 +34,18 @@ export default function Editor({ initialCode }: { initialCode: string }) {
     [initialCode],
   );
 
-  const flatRanges = useMemo(() => flattenRanges(ranges), [ranges]);
-  useCodeBlock(ref, flatRanges);
+  useCodeBlock(ref, ranges);
 
   function handleInput(e: FormEvent<HTMLElement>) {
     const nextCode = e.currentTarget.textContent ?? '';
     const t0 = performance.now();
-    let nextRanges: CompactRange[];
+    let nextRanges: RangesData;
     if (incremental) {
       const state = parseStateRef.current;
       if (!state) {
         const { tree, fragments } = parseIncremental(parser, nextCode);
         parseStateRef.current = { code: nextCode, fragments };
-        nextRanges = rangesFromTree(tree);
+        nextRanges = rangesFromTree(tree, nextCode);
       } else {
         const edited = applyEdit(state, nextCode);
         const { tree, fragments } = parseIncremental(
@@ -56,7 +54,7 @@ export default function Editor({ initialCode }: { initialCode: string }) {
           edited.fragments,
         );
         parseStateRef.current = { code: nextCode, fragments };
-        nextRanges = rangesFromTree(tree);
+        nextRanges = rangesFromTree(tree, nextCode);
       }
     } else {
       parseStateRef.current = null;

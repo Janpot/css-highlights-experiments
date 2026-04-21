@@ -7,7 +7,7 @@ export default function Page() {
   const blocks = [
     { title: 'Short', code: SHORT_CODE },
     { title: 'Medium', code: MEDIUM_CODE },
-    { title: 'Long (viewport-only)', code: makeLongCode(40) },
+    { title: 'Long', code: makeLongCode(40) },
   ];
 
   return (
