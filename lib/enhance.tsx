@@ -78,13 +78,17 @@ export function enhance(code: string): ReactNode {
           `Mismatched @region-end for "${end[1]}" at line ${i + 1}`,
         );
       }
+      if (frame.buffer.endsWith('\n')) {
+        frame.buffer = frame.buffer.slice(0, -1);
+      }
       flush(frame, i);
       const parent = stack[stack.length - 1];
       parent.children.push(
-        <div key={`rg-${frame.key}`} className={frame.className!}>
+        <span key={`rg-${frame.key}`} className={frame.className!}>
           {frame.children}
-        </div>,
+        </span>,
       );
+      parent.buffer += '\n';
       continue;
     }
 

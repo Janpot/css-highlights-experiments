@@ -46,6 +46,9 @@ import { parser } from '@lezer/javascript';
 const tree = parser.parse('const x = 42');
 console.log(tree.toString());
 // @region-end region-highlight
+
+const nodeCount = tree.length;
+console.log(\`parsed \${nodeCount} characters\`);
 `;
 
 export const CSS_CODE = `/* A small CSS snippet */

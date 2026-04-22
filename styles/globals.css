@@ -138,7 +138,9 @@ label.toggle {
   font-weight: 600;
 }
 
-.region-highlight {
-  border: 1px dotted currentColor;
-  border-radius: 4px;
+.region-highlight,
+.mui-code [data-hl] {
+  display: inline-block;
+  width: 100%;
+  background: color-mix(in srgb, currentColor 10%, transparent);
 }
