@@ -1,9 +1,12 @@
 import type { ReactNode } from "react";
+import { parser as jsParser } from "@lezer/javascript";
+import { parser as cssParser } from "@lezer/css";
 import CodeBlock from "@/components/CodeBlock";
 import {
   SHORT_CODE,
   MEDIUM_CODE,
   LINKED_CODE,
+  CSS_CODE,
   makeLongCode,
 } from "@/lib/samples";
 
@@ -38,19 +41,7 @@ function linkify(code: string): ReactNode {
   return <>{out}</>;
 }
 
-interface Block {
-  title: string;
-  code: ReactNode;
-}
-
 export default function Page() {
-  const longCode = makeLongCode(40);
-  const blocks: Block[] = [
-    { title: "Short", code: SHORT_CODE },
-    { title: "Medium", code: MEDIUM_CODE },
-    { title: "With a nested link", code: linkify(LINKED_CODE) },
-    { title: "Long", code: longCode },
-  ];
   return (
     <>
       <h1>Build-time highlighting (compressed)</h1>
@@ -59,12 +50,26 @@ export default function Page() {
         ranges are varint-packed and base64-encoded before crossing the client
         boundary, and decoded in the browser. Compare the RSC payload size.
       </p>
-      {blocks.map((b, i) => (
-        <section key={i}>
-          <h2>{b.title}</h2>
-          <CodeBlock code={b.code} compressed />
-        </section>
-      ))}
+      <section>
+        <h2>Short</h2>
+        <CodeBlock code={SHORT_CODE} parser={jsParser} compressed />
+      </section>
+      <section>
+        <h2>Medium</h2>
+        <CodeBlock code={MEDIUM_CODE} parser={jsParser} compressed />
+      </section>
+      <section>
+        <h2>With a nested link</h2>
+        <CodeBlock code={linkify(LINKED_CODE)} parser={jsParser} compressed />
+      </section>
+      <section>
+        <h2>CSS</h2>
+        <CodeBlock code={CSS_CODE} parser={cssParser} compressed />
+      </section>
+      <section>
+        <h2>Long</h2>
+        <CodeBlock code={makeLongCode(40)} parser={jsParser} compressed />
+      </section>
     </>
   );
 }

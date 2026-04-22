@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { parser as jsParser } from '@lezer/javascript';
 import EditableCodeBlock from '@/components/EditableCodeBlock';
 import { MEDIUM_CODE } from '@/lib/samples';
 
@@ -26,6 +27,7 @@ export default function Page() {
       <EditableCodeBlock
         value={code}
         onChange={setCode}
+        parser={jsParser}
         incremental={incremental}
       />
     </>

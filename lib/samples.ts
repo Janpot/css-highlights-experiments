@@ -46,6 +46,31 @@ const tree = parser.parse('const x = 42');
 console.log(tree.toString());
 `;
 
+export const CSS_CODE = `/* A small CSS snippet */
+:root {
+  --accent: #4f46e5;
+  --radius: 8px;
+}
+
+.card {
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--accent) 10%, white);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.card:hover {
+  transform: translateY(-1px);
+  transition: transform 120ms ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  .card {
+    background: color-mix(in srgb, var(--accent) 20%, black);
+  }
+}
+`;
+
 export function makeLongCode(copies = 40): string {
   const out: string[] = [];
   for (let i = 0; i < copies; i++) {

@@ -3,6 +3,7 @@ import {
   SHORT_CODE,
   MEDIUM_CODE,
   LINKED_CODE,
+  CSS_CODE,
   makeLongCode,
 } from '@/lib/samples';
 
@@ -28,6 +29,10 @@ export default function Page() {
       <section>
         <h2>Linked</h2>
         <Code fileName="linked.js">{LINKED_CODE}</Code>
+      </section>
+      <section>
+        <h2>CSS</h2>
+        <Code fileName="styles.css">{CSS_CODE}</Code>
       </section>
       <section>
         <h2>Long</h2>

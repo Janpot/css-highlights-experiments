@@ -1,14 +1,8 @@
-import { SHORT_CODE, MEDIUM_CODE, makeLongCode } from '@/lib/samples';
+import { SHORT_CODE, MEDIUM_CODE, CSS_CODE, makeLongCode } from '@/lib/samples';
 
 export const dynamic = 'force-static';
 
 export default function Page() {
-  const blocks = [
-    { title: 'Short', code: SHORT_CODE },
-    { title: 'Medium', code: MEDIUM_CODE },
-    { title: 'Long', code: makeLongCode(40) },
-  ];
-
   return (
     <>
       <h1>Plain text</h1>
@@ -17,14 +11,30 @@ export default function Page() {
         <code>&lt;pre&gt;&lt;code&gt;</code>. Use this to compare RSC payload
         size and rendering cost against the highlighted variants.
       </p>
-      {blocks.map((b, i) => (
-        <section key={i}>
-          <h2>{b.title}</h2>
-          <pre>
-            <code>{b.code}</code>
-          </pre>
-        </section>
-      ))}
+      <section>
+        <h2>Short</h2>
+        <pre>
+          <code>{SHORT_CODE}</code>
+        </pre>
+      </section>
+      <section>
+        <h2>Medium</h2>
+        <pre>
+          <code>{MEDIUM_CODE}</code>
+        </pre>
+      </section>
+      <section>
+        <h2>CSS</h2>
+        <pre>
+          <code>{CSS_CODE}</code>
+        </pre>
+      </section>
+      <section>
+        <h2>Long</h2>
+        <pre>
+          <code>{makeLongCode(40)}</code>
+        </pre>
+      </section>
     </>
   );
 }

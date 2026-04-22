@@ -1,6 +1,6 @@
 'use client';
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
-import { parser } from '@lezer/javascript';
+import type { Parser } from '@lezer/common';
 import {
   computeHighlights,
   rangesFromTree,
@@ -18,21 +18,29 @@ function escapeHtml(s: string): string {
     .replaceAll('>', '&gt;');
 }
 
+const EMPTY_RANGES: RangesData = { classes: [], tokens: [] };
+
+function highlight(parser: Parser | undefined, code: string): RangesData {
+  return parser ? computeHighlights(parser, code) : EMPTY_RANGES;
+}
+
 interface Props {
   value: string;
   onChange: (next: string) => void;
+  parser?: Parser;
   incremental?: boolean;
 }
 
 export default function EditableCodeBlock({
   value,
   onChange,
+  parser,
   incremental = false,
 }: Props) {
   const ref = useRef<HTMLElement>(null);
   const parseStateRef = useRef<ParseState | null>(null);
   const [ranges, setRanges] = useState<RangesData>(() =>
-    computeHighlights(parser, value),
+    highlight(parser, value),
   );
 
   const initialHtml = useMemo(
@@ -46,7 +54,7 @@ export default function EditableCodeBlock({
 
   useEffect(() => {
     parseStateRef.current = null;
-  }, [incremental]);
+  }, [incremental, parser]);
 
   useEffect(() => {
     const el = ref.current;
@@ -54,13 +62,13 @@ export default function EditableCodeBlock({
     if ((el.textContent ?? '') === value) return;
     el.textContent = value;
     parseStateRef.current = null;
-    setRanges(computeHighlights(parser, value));
-  }, [value]);
+    setRanges(highlight(parser, value));
+  }, [value, parser]);
 
   function handleInput(e: FormEvent<HTMLElement>) {
     const nextCode = e.currentTarget.textContent ?? '';
     let nextRanges: RangesData;
-    if (incremental) {
+    if (parser && incremental) {
       const state = parseStateRef.current;
       if (!state) {
         const { tree, fragments } = parseIncremental(parser, nextCode);
@@ -78,7 +86,7 @@ export default function EditableCodeBlock({
       }
     } else {
       parseStateRef.current = null;
-      nextRanges = computeHighlights(parser, nextCode);
+      nextRanges = highlight(parser, nextCode);
     }
     setRanges(nextRanges);
     onChange(nextCode);
