@@ -20,9 +20,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <nav className="site">
           <Link href="/">Home</Link>
+          <Link href="/plain-text">Plain text</Link>
           <Link href="/build-time">Build-time</Link>
           <Link href="/build-time-compressed">Build-time (compressed)</Link>
-          <Link href="/client-runtime">Client runtime</Link>
           <Link href="/editor">Editor</Link>
           <Link href="/mui">MUI</Link>
           <span className="spacer" />

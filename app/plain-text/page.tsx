@@ -1,5 +1,4 @@
-import CodeBlock from './CodeBlock';
-import { SHORT_CODE, MEDIUM_CODE, makeLongCode } from '../build-time/samples';
+import { SHORT_CODE, MEDIUM_CODE, makeLongCode } from '@/lib/samples';
 
 export const dynamic = 'force-static';
 
@@ -12,16 +11,18 @@ export default function Page() {
 
   return (
     <>
-      <h1>Client-runtime highlighting</h1>
+      <h1>Plain text</h1>
       <p>
-        The server ships only the raw code string. The Lezer parser runs in the
-        browser on mount. Compare the Network payload size with{' '}
-        <a href="/build-time">/build-time</a>.
+        Baseline: no highlighting at all, just{' '}
+        <code>&lt;pre&gt;&lt;code&gt;</code>. Use this to compare RSC payload
+        size and rendering cost against the highlighted variants.
       </p>
       {blocks.map((b, i) => (
         <section key={i}>
           <h2>{b.title}</h2>
-          <CodeBlock code={b.code} />
+          <pre>
+            <code>{b.code}</code>
+          </pre>
         </section>
       ))}
     </>

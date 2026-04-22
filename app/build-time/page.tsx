@@ -1,10 +1,13 @@
-import type { ReactNode } from 'react';
-import { parser } from '@lezer/javascript';
-import { computeHighlights } from '@/lib/highlight';
-import CodeBlock from './CodeBlock';
-import { SHORT_CODE, MEDIUM_CODE, LINKED_CODE, makeLongCode } from './samples';
+import type { ReactNode } from "react";
+import CodeBlock from "@/components/CodeBlock";
+import {
+  SHORT_CODE,
+  MEDIUM_CODE,
+  LINKED_CODE,
+  makeLongCode,
+} from "@/lib/samples";
 
-export const dynamic = 'force-static';
+export const dynamic = "force-static";
 
 const URL_RE = /https?:\/\/[^\s'"<>()]+/g;
 const TRAILING_PUNCT = /[.,;:!?)\]}]+$/;
@@ -37,27 +40,17 @@ function linkify(code: string): ReactNode {
 
 interface Block {
   title: string;
-  code: string;
-  enhance?: (code: string) => ReactNode;
+  code: React.ReactNode;
 }
 
 export default function Page() {
   const longCode = makeLongCode(40);
   const blocks: Block[] = [
-    { title: 'Short', code: SHORT_CODE },
-    { title: 'Medium', code: MEDIUM_CODE },
-    {
-      title: 'With a nested link',
-      code: LINKED_CODE,
-      enhance: linkify,
-    },
-    { title: 'Long', code: longCode },
+    { title: "Short", code: SHORT_CODE },
+    { title: "Medium", code: MEDIUM_CODE },
+    { title: "With a nested link", code: linkify(LINKED_CODE) },
+    { title: "Long", code: longCode },
   ];
-  const prepared = blocks.map((b) => ({
-    ...b,
-    ranges: computeHighlights(parser, b.code),
-  }));
-
   return (
     <>
       <h1>Build-time highlighting</h1>
@@ -66,13 +59,10 @@ export default function Page() {
         array across the client boundary as a plain object. The parser never
         ships to the browser.
       </p>
-      {prepared.map((b, i) => (
+      {blocks.map((b, i) => (
         <section key={i}>
           <h2>{b.title}</h2>
-          <CodeBlock
-            code={b.enhance ? b.enhance(b.code) : b.code}
-            ranges={b.ranges}
-          />
+          <CodeBlock code={b.code} />
         </section>
       ))}
     </>

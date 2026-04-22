@@ -19,8 +19,8 @@ export default function Home() {
           but ranges are varint+base64 compressed to shrink the RSC payload.
         </li>
         <li>
-          <a href="/client-runtime">/client-runtime</a> — server ships raw code,
-          browser parses on mount.
+          <a href="/plain-text">/plain-text</a> — baseline:{' '}
+          <code>&lt;pre&gt;&lt;code&gt;</code> with no highlighting.
         </li>
         <li>
           <a href="/editor">/editor</a> — <code>contenteditable</code> with live

@@ -4,7 +4,7 @@ import {
   MEDIUM_CODE,
   LINKED_CODE,
   makeLongCode,
-} from '../build-time/samples';
+} from '@/lib/samples';
 
 export const dynamic = 'force-static';
 

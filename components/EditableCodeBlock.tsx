@@ -1,5 +1,5 @@
 'use client';
-import { FormEvent, useMemo, useRef, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { parser } from '@lezer/javascript';
 import {
   computeHighlights,
@@ -18,27 +18,47 @@ function escapeHtml(s: string): string {
     .replaceAll('>', '&gt;');
 }
 
-export default function Editor({ initialCode }: { initialCode: string }) {
-  const ref = useRef<HTMLElement>(null);
-  const [incremental, setIncremental] = useState(true);
-  const [code, setCode] = useState(initialCode);
-  const [ranges, setRanges] = useState<RangesData>(() =>
-    computeHighlights(parser, initialCode),
-  );
-  const [lastParseMs, setLastParseMs] = useState<number | null>(null);
+interface Props {
+  value: string;
+  onChange: (next: string) => void;
+  incremental?: boolean;
+}
 
+export default function EditableCodeBlock({
+  value,
+  onChange,
+  incremental = false,
+}: Props) {
+  const ref = useRef<HTMLElement>(null);
   const parseStateRef = useRef<ParseState | null>(null);
+  const [ranges, setRanges] = useState<RangesData>(() =>
+    computeHighlights(parser, value),
+  );
 
   const initialHtml = useMemo(
-    () => ({ __html: escapeHtml(initialCode) }),
-    [initialCode],
+    () => ({ __html: escapeHtml(value) }),
+    // Initial DOM content only; later external updates are handled below.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   );
 
   useCodeBlock(ref, ranges);
 
+  useEffect(() => {
+    parseStateRef.current = null;
+  }, [incremental]);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if ((el.textContent ?? '') === value) return;
+    el.textContent = value;
+    parseStateRef.current = null;
+    setRanges(computeHighlights(parser, value));
+  }, [value]);
+
   function handleInput(e: FormEvent<HTMLElement>) {
     const nextCode = e.currentTarget.textContent ?? '';
-    const t0 = performance.now();
     let nextRanges: RangesData;
     if (incremental) {
       const state = parseStateRef.current;
@@ -60,41 +80,20 @@ export default function Editor({ initialCode }: { initialCode: string }) {
       parseStateRef.current = null;
       nextRanges = computeHighlights(parser, nextCode);
     }
-    setLastParseMs(performance.now() - t0);
-    setCode(nextCode);
     setRanges(nextRanges);
+    onChange(nextCode);
   }
 
   return (
-    <>
-      <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-        <label className="toggle">
-          <input
-            type="checkbox"
-            checked={incremental}
-            onChange={(e) => {
-              setIncremental(e.target.checked);
-              parseStateRef.current = null;
-            }}
-          />
-          incremental parsing
-        </label>
-        {lastParseMs != null && (
-          <span style={{ fontSize: 12, opacity: 0.7 }}>
-            last parse: {lastParseMs.toFixed(2)}ms
-          </span>
-        )}
-      </div>
-      <pre>
-        <code
-          ref={ref}
-          contentEditable="plaintext-only"
-          suppressContentEditableWarning
-          spellCheck={false}
-          onInput={handleInput}
-          dangerouslySetInnerHTML={initialHtml}
-        />
-      </pre>
-    </>
+    <pre>
+      <code
+        ref={ref}
+        contentEditable="plaintext-only"
+        suppressContentEditableWarning
+        spellCheck={false}
+        onInput={handleInput}
+        dangerouslySetInnerHTML={initialHtml}
+      />
+    </pre>
   );
 }
