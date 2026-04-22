@@ -9,6 +9,14 @@ import {
 
 export const dynamic = 'force-static';
 
+const MUI_LINKED_CODE = LINKED_CODE.replace(
+  /^([ \t]*)\/\/ @region-start\s+\S+[ \t]*$/gm,
+  '$1// @highlight-start',
+).replace(
+  /^([ \t]*)\/\/ @region-end\s+\S+[ \t]*$/gm,
+  '$1// @highlight-end',
+);
+
 export default function Page() {
   return (
     <>
@@ -28,7 +36,7 @@ export default function Page() {
       </section>
       <section>
         <h2>Linked</h2>
-        <Code fileName="linked.js">{LINKED_CODE}</Code>
+        <Code fileName="linked.js">{MUI_LINKED_CODE}</Code>
       </section>
       <section>
         <h2>CSS</h2>

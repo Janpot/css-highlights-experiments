@@ -137,3 +137,8 @@ label.toggle {
   opacity: 1;
   font-weight: 600;
 }
+
+.region-highlight {
+  border: 1px dotted currentColor;
+  border-radius: 4px;
+}

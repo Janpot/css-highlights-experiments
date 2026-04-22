@@ -42,8 +42,10 @@ export const LINKED_CODE = `// The Lezer parser docs live at https://lezer.codem
 // Anchor above is a real clickable link inside the code block.
 import { parser } from '@lezer/javascript';
 
+// @region-start region-highlight
 const tree = parser.parse('const x = 42');
 console.log(tree.toString());
+// @region-end region-highlight
 `;
 
 export const CSS_CODE = `/* A small CSS snippet */

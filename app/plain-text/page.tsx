@@ -1,4 +1,11 @@
-import { SHORT_CODE, MEDIUM_CODE, CSS_CODE, makeLongCode } from '@/lib/samples';
+import { enhance } from '@/lib/enhance';
+import {
+  SHORT_CODE,
+  MEDIUM_CODE,
+  LINKED_CODE,
+  CSS_CODE,
+  makeLongCode,
+} from '@/lib/samples';
 
 export const dynamic = 'force-static';
 
@@ -21,6 +28,12 @@ export default function Page() {
         <h2>Medium</h2>
         <pre>
           <code>{MEDIUM_CODE}</code>
+        </pre>
+      </section>
+      <section>
+        <h2>Enhanced (links + regions)</h2>
+        <pre>
+          <code>{enhance(LINKED_CODE)}</code>
         </pre>
       </section>
       <section>
