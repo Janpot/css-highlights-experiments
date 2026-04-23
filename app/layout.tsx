@@ -29,7 +29,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <Link href="/html-string">HTML string</Link>
           <Link href="/jsx-spans">JSX spans</Link>
           <Link href="/editor">Editor</Link>
-          <Link href="/mui">MUI</Link>
+          <Link href="/mui">MUI (HAST compressed)</Link>
           <span className="spacer" />
           <a
             href="https://github.com/Janpot/css-highlights-experiments"
