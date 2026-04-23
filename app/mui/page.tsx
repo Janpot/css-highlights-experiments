@@ -35,7 +35,7 @@ export default function Page() {
         <Code fileName="medium.js">{MEDIUM_CODE}</Code>
       </section>
       <section>
-        <h2>Linked</h2>
+        <h2>Enhanced (links + regions)</h2>
         <Code fileName="linked.js">{MUI_LINKED_CODE}</Code>
       </section>
       <section>
