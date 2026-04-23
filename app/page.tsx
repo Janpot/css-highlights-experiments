@@ -10,6 +10,10 @@ export default function Home() {
       <h2>Demos</h2>
       <ul>
         <li>
+          <a href="/plain-text">/plain-text</a> — baseline:{' '}
+          <code>&lt;pre&gt;&lt;code&gt;</code> with no highlighting.
+        </li>
+        <li>
           <a href="/build-time">/build-time</a> — ranges computed in a server
           component at build time; serialized across the client boundary as a
           plain object.
@@ -19,12 +23,13 @@ export default function Home() {
           but ranges are varint+base64 compressed to shrink the RSC payload.
         </li>
         <li>
-          <a href="/plain-text">/plain-text</a> — baseline:{' '}
-          <code>&lt;pre&gt;&lt;code&gt;</code> with no highlighting.
-        </li>
-        <li>
           <a href="/editor">/editor</a> — <code>contenteditable</code> with live
           re-parsing, optional incremental parsing.
+        </li>
+        <li>
+          <a href="/mui">/mui</a> — MUI <code>CodeHighlighter</code> (
+          <code>@mui/internal-docs-infra</code>) for comparison; uses a classic
+          tokens-to-spans approach instead of the CSS Highlight API.
         </li>
       </ul>
       <p>
