@@ -38,6 +38,10 @@ export const defaultHighlighter: Highlighter = tagHighlighter([
   { tag: t.typeName, class: 'lzh-type' },
   { tag: t.operator, class: 'lzh-op' },
   { tag: [t.punctuation, t.paren, t.brace, t.bracket, t.separator], class: 'lzh-punct' },
+  { tag: t.angleBracket, class: 'lzh-punct' },
+  { tag: t.standard(t.tagName), class: 'lzh-tag-builtin' },
+  { tag: t.tagName, class: 'lzh-tag' },
+  { tag: t.attributeName, class: 'lzh-attr' },
   { tag: t.meta, class: 'lzh-meta' },
 ]);
 

@@ -89,3 +89,10 @@
 ::highlight(lzh-fn) {
   color: var(--lzh-fn);
 }
+::highlight(lzh-tag),
+::highlight(lzh-tag-builtin) {
+  color: var(--lzh-esc);
+}
+::highlight(lzh-attr) {
+  color: var(--lzh-this);
+}

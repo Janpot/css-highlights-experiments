@@ -1,6 +1,8 @@
 import { parser as jsParser } from '@lezer/javascript';
 import CodeBlock from '@/components/CodeBlock';
 
+const tsxParser = jsParser.configure({ dialect: 'jsx ts' });
+
 const USAGE_SAMPLE = `import { parser } from '@lezer/javascript';
 import CodeBlock from '@/components/CodeBlock';
 
@@ -41,7 +43,7 @@ export default function Home() {
         ships only the resulting token ranges to the client — the parser itself
         never enters the browser bundle.
       </p>
-      <CodeBlock code={USAGE_SAMPLE} parser={jsParser} />
+      <CodeBlock code={USAGE_SAMPLE} parser={tsxParser} />
 
       <p>
         <code>code</code> accepts any <code>ReactNode</code>, not just a string.
@@ -50,10 +52,10 @@ export default function Home() {
         interleave elements like links or regions and they'll still be
         highlighted:
       </p>
-      <CodeBlock code={REACTNODE_SAMPLE} parser={jsParser} />
+      <CodeBlock code={REACTNODE_SAMPLE} parser={tsxParser} />
       <p>Which renders as:</p>
       <CodeBlock
-        parser={jsParser}
+        parser={tsxParser}
         code={
           <>
             {`import { `}
