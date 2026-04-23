@@ -107,3 +107,55 @@
 ::highlight(lzh-var) {
   color: var(--lzh-this);
 }
+
+.lzh-root .lzh-kw {
+  color: var(--lzh-kw);
+}
+.lzh-root .lzh-this {
+  color: var(--lzh-this);
+}
+.lzh-root .lzh-const {
+  color: var(--lzh-this);
+}
+.lzh-root .lzh-str {
+  color: var(--lzh-str);
+}
+.lzh-root .lzh-re {
+  color: var(--lzh-re);
+}
+.lzh-root .lzh-esc {
+  color: var(--lzh-esc);
+}
+.lzh-root .lzh-num {
+  color: var(--lzh-num);
+}
+.lzh-root .lzh-bool {
+  color: var(--lzh-bool);
+}
+.lzh-root .lzh-nul {
+  color: var(--lzh-nul);
+}
+.lzh-root .lzh-cmt {
+  color: var(--lzh-cmt);
+}
+.lzh-root .lzh-fn {
+  color: var(--lzh-fn);
+}
+.lzh-root .lzh-tag,
+.lzh-root .lzh-tag-builtin {
+  color: var(--lzh-esc);
+}
+.lzh-root .lzh-attr {
+  color: var(--lzh-this);
+}
+.lzh-root .lzh-prop {
+  color: var(--lzh-this);
+}
+.lzh-root .lzh-cls,
+.lzh-root .lzh-def,
+.lzh-root .lzh-type {
+  color: var(--lzh-fn);
+}
+.lzh-root .lzh-var {
+  color: var(--lzh-this);
+}

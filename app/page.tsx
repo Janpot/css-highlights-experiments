@@ -101,6 +101,15 @@ export default function Home() {
           but ranges are varint+base64 compressed to shrink the RSC payload.
         </li>
         <li>
+          <a href="/html-string">/html-string</a> - server component emits an
+          HTML string of <code>&lt;span class=&quot;lzh-*&quot;&gt;</code>{" "}
+          tokens via <code>dangerouslySetInnerHTML</code>.
+        </li>
+        <li>
+          <a href="/jsx-spans">/jsx-spans</a> - server component returns the
+          same spans as nested JSX children of <code>&lt;code&gt;</code>.
+        </li>
+        <li>
           <a href="/editor">/editor</a> - <code>contenteditable</code> with live
           re-parsing, optional incremental parsing.
         </li>
