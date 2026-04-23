@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "measure": "node scripts/measure-page-sizes.mjs"
   },
   "dependencies": {
     "@lezer/common": "^1.2.3",

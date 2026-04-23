@@ -1,7 +1,14 @@
 import { parser as jsParser } from "@lezer/javascript";
 import CodeBlock from "@/components/CodeBlock";
-import { computeHtmlSizes } from "@/lib/compareSizes";
-import { MEDIUM_CODE } from "@/lib/samples";
+import pageSizes from "@/data/pageSizes.json";
+
+interface PageSize {
+  compressed: number;
+  uncompressed: number;
+  encoding: string | null;
+}
+const sizeMap = (pageSizes as { pages: Record<string, PageSize> }).pages;
+const measuredAt = (pageSizes as { measuredAt: string | null }).measuredAt;
 
 const tsxParser = jsParser.configure({ dialect: "jsx ts" });
 
@@ -31,7 +38,6 @@ const REACTNODE_SAMPLE = `<CodeBlock
 interface Row {
   variant: string;
   href: string;
-  ssrHtml: "plain" | "spans";
   serverHighlight: boolean;
   support: "widely" | "baseline-2026";
   initialHighlighted: boolean;
@@ -50,7 +56,6 @@ const GROUPS: Group[] = [
       {
         variant: "/plain-text",
         href: "/plain-text",
-        ssrHtml: "plain",
         serverHighlight: false,
         support: "widely",
         initialHighlighted: false,
@@ -64,7 +69,6 @@ const GROUPS: Group[] = [
       {
         variant: "/build-time",
         href: "/build-time",
-        ssrHtml: "plain",
         serverHighlight: true,
         support: "baseline-2026",
         initialHighlighted: false,
@@ -73,7 +77,6 @@ const GROUPS: Group[] = [
       {
         variant: "/build-time-compressed",
         href: "/build-time-compressed",
-        ssrHtml: "plain",
         serverHighlight: true,
         support: "baseline-2026",
         initialHighlighted: false,
@@ -87,7 +90,6 @@ const GROUPS: Group[] = [
       {
         variant: "/html-string",
         href: "/html-string",
-        ssrHtml: "spans",
         serverHighlight: true,
         support: "widely",
         initialHighlighted: true,
@@ -96,7 +98,6 @@ const GROUPS: Group[] = [
       {
         variant: "/html-string-hydrated",
         href: "/html-string-hydrated",
-        ssrHtml: "plain",
         serverHighlight: true,
         support: "widely",
         initialHighlighted: false,
@@ -105,7 +106,6 @@ const GROUPS: Group[] = [
       {
         variant: "/jsx-spans",
         href: "/jsx-spans",
-        ssrHtml: "spans",
         serverHighlight: true,
         support: "widely",
         initialHighlighted: true,
@@ -114,7 +114,6 @@ const GROUPS: Group[] = [
       {
         variant: "/mui",
         href: "/mui",
-        ssrHtml: "plain",
         serverHighlight: true,
         support: "widely",
         initialHighlighted: false,
@@ -124,9 +123,16 @@ const GROUPS: Group[] = [
   },
 ];
 
+const byteFormatter = new Intl.NumberFormat("en-US", {
+  style: "unit",
+  unit: "byte",
+  unitDisplay: "narrow",
+  notation: "compact",
+  maximumFractionDigits: 1,
+});
+
 function formatBytes(n: number): string {
-  if (n < 1024) return `${n} B`;
-  return `${(n / 1024).toFixed(1)} KB`;
+  return byteFormatter.format(n);
 }
 
 function YesNo({ value }: { value: boolean }) {
@@ -141,7 +147,6 @@ function YesNo({ value }: { value: boolean }) {
 }
 
 export default function Home() {
-  const sizes = computeHtmlSizes(MEDIUM_CODE);
   return (
     <>
       <h1>Lezer + CSS Custom Highlight API</h1>
@@ -252,10 +257,15 @@ export default function Home() {
 
       <h2>Comparison</h2>
       <p>
-        SSR HTML byte counts are measured for the <code>MEDIUM_CODE</code>{" "}
-        sample, counting only the{" "}
-        <code>&lt;pre&gt;&lt;code&gt;…&lt;/code&gt;</code>
-        markup emitted during SSR (not the RSC payload or hydration data).
+        Sizes are real HTTP response bodies. <code>pnpm measure</code> runs{" "}
+        <code>next build</code>, starts <code>next start</code> on port 3100,
+        requests each variant with{" "}
+        <code>Accept-Encoding: gzip, deflate, br</code>, and records the bytes
+        received over the wire (compressed) and after decoding (uncompressed)
+        into <code>data/pageSizes.json</code>. Pass a base URL (e.g.{" "}
+        <code>pnpm measure https://example.com</code>) to skip the build and
+        measure an already-running server instead.
+        {measuredAt ? ` Last measured ${measuredAt}.` : " Not yet measured."}
       </p>
       <table>
         <thead>
@@ -263,9 +273,9 @@ export default function Home() {
             <th>Variant</th>
             <th>Uncompressed HTML</th>
             <th>gzip HTML</th>
-            <th>Server-side highlighting</th>
+            <th className="yn-cell">Server-side highlighting</th>
             <th>Browser support</th>
-            <th>Initial HTML highlighted</th>
+            <th className="yn-cell">Initial HTML highlighted</th>
             <th>Interactivity</th>
           </tr>
         </thead>
@@ -277,15 +287,15 @@ export default function Home() {
               </th>
             </tr>
             {g.rows.map((r) => {
-              const s = r.ssrHtml === "spans" ? sizes.spans : sizes.plain;
+              const s = sizeMap[r.href];
               return (
                 <tr key={r.variant}>
                   <td>
                     <a href={r.href}>{r.variant}</a>
                   </td>
-                  <td>{formatBytes(s.raw)}</td>
-                  <td>{formatBytes(s.gz)}</td>
-                  <td>
+                  <td>{s ? formatBytes(s.uncompressed) : "—"}</td>
+                  <td>{s ? formatBytes(s.compressed) : "—"}</td>
+                  <td className="yn-cell">
                     <YesNo value={r.serverHighlight} />
                   </td>
                   <td>
@@ -293,7 +303,7 @@ export default function Home() {
                       ? "widely available"
                       : "Baseline 2026"}
                   </td>
-                  <td>
+                  <td className="yn-cell">
                     <YesNo value={r.initialHighlighted} />
                   </td>
                   <td>{r.interactivity}</td>

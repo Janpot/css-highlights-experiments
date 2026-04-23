@@ -164,6 +164,10 @@ table thead th {
   font-weight: 600;
 }
 
+.yn-cell {
+  text-align: center;
+}
+
 .yn {
   display: inline-block;
   width: 1.25rem;

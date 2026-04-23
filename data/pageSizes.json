@@ -1,0 +1,41 @@
+{
+  "base": "http://localhost:3100",
+  "measuredAt": "2026-04-23T17:57:30.946Z",
+  "pages": {
+    "/plain-text": {
+      "compressed": 6296,
+      "uncompressed": 67958,
+      "encoding": "gzip"
+    },
+    "/build-time": {
+      "compressed": 8284,
+      "uncompressed": 103642,
+      "encoding": "gzip"
+    },
+    "/build-time-compressed": {
+      "compressed": 9036,
+      "uncompressed": 89336,
+      "encoding": "gzip"
+    },
+    "/html-string": {
+      "compressed": 16621,
+      "uncompressed": 647876,
+      "encoding": "gzip"
+    },
+    "/html-string-hydrated": {
+      "compressed": 15046,
+      "uncompressed": 466657,
+      "encoding": "gzip"
+    },
+    "/jsx-spans": {
+      "compressed": 89629,
+      "uncompressed": 926048,
+      "encoding": "gzip"
+    },
+    "/mui": {
+      "compressed": 22977,
+      "uncompressed": 67997,
+      "encoding": "gzip"
+    }
+  }
+}
