@@ -13,6 +13,17 @@ export default function Page() {
   );
 }`;
 
+const REACTNODE_SAMPLE = `<CodeBlock
+  parser={parser}
+  code={
+    <>
+      {\`import { \`}
+      <a href="https://lezer.codemirror.net/">parser</a>
+      {\` } from '@lezer/javascript';\`}
+    </>
+  }
+/>`;
+
 export default function Home() {
   return (
     <>
@@ -31,6 +42,26 @@ export default function Home() {
         never enters the browser bundle.
       </p>
       <CodeBlock code={USAGE_SAMPLE} parser={jsParser} />
+
+      <p>
+        <code>code</code> accepts any <code>ReactNode</code>, not just a string.
+        The text content is extracted for parsing, while the original nodes are
+        rendered inside the <code>&lt;pre&gt;&lt;code&gt;</code> — so you can
+        interleave elements like links or regions and they'll still be
+        highlighted:
+      </p>
+      <CodeBlock code={REACTNODE_SAMPLE} parser={jsParser} />
+      <p>Which renders as:</p>
+      <CodeBlock
+        parser={jsParser}
+        code={
+          <>
+            {`import { `}
+            <a href="https://lezer.codemirror.net/">parser</a>
+            {` } from '@lezer/javascript';`}
+          </>
+        }
+      />
 
       <h2>Crossing the client boundary</h2>
       <p>
