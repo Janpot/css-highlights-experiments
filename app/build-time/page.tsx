@@ -1,20 +1,20 @@
-import type { Metadata } from 'next';
-import { parser as jsParser } from '@lezer/javascript';
-import { parser as cssParser } from '@lezer/css';
-import CodeBlock from '@/components/CodeBlock';
-import { enhance } from '@/lib/enhance';
+import type { Metadata } from "next";
+import { parser as jsParser } from "@lezer/javascript";
+import { parser as cssParser } from "@lezer/css";
+import CodeBlock from "@/components/CodeBlock";
+import { enhance } from "@/lib/enhance";
 import {
   SHORT_CODE,
   MEDIUM_CODE,
   LINKED_CODE,
   CSS_CODE,
   makeLongCode,
-} from '@/lib/samples';
+} from "@/lib/samples";
 
-export const dynamic = 'force-static';
+export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: 'Build-time highlighting',
+  title: "Build-time highlighting",
 };
 
 export default function Page() {

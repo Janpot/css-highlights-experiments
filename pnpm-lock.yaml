@@ -21,8 +21,8 @@ importers:
         specifier: ^1.4.21
         version: 1.5.4
       '@mui/internal-docs-infra':
-        specifier: 0.8.1-canary.0
-        version: 0.8.1-canary.0(@types/react@19.2.14)(next@15.5.15(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(prettier@3.8.3)(react@19.2.5)(typescript@6.0.3)
+        specifier: https://pkg.pr.new/mui/mui-public/@mui/internal-docs-infra@f334b1c
+        version: https://pkg.pr.new/mui/mui-public/@mui/internal-docs-infra@f334b1c(@types/react@19.2.14)(next@15.5.15(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(prettier@3.8.3)(react@19.2.5)(typescript@6.0.3)
       next:
         specifier: ^15.0.0
         version: 15.5.15(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
@@ -217,8 +217,9 @@ packages:
   '@lezer/lr@1.4.9':
     resolution: {integrity: sha512-mF6irshW4nRJEhdR0HOAxxTDGss+rQFqA0nLRlZsPh14q+DB9Fqp0YbOvyRSOeKPLfUL/w5wPQAcETvkQ1VApg==}
 
-  '@mui/internal-docs-infra@0.8.1-canary.0':
-    resolution: {integrity: sha512-1wfHJNcEYRW7CkwnCkgqgZnkp/Myrypp1D9E5z3E8SABZDKxOW+KCPSUpprqb3wcUdxvjzrMFy0WCF8mFXk/og==}
+  '@mui/internal-docs-infra@https://pkg.pr.new/mui/mui-public/@mui/internal-docs-infra@f334b1c':
+    resolution: {tarball: https://pkg.pr.new/mui/mui-public/@mui/internal-docs-infra@f334b1c}
+    version: 0.8.0
     engines: {node: '>=22.18.0'}
     hasBin: true
     peerDependencies:
@@ -1007,7 +1008,7 @@ snapshots:
     dependencies:
       '@lezer/common': 1.5.2
 
-  '@mui/internal-docs-infra@0.8.1-canary.0(@types/react@19.2.14)(next@15.5.15(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(prettier@3.8.3)(react@19.2.5)(typescript@6.0.3)':
+  '@mui/internal-docs-infra@https://pkg.pr.new/mui/mui-public/@mui/internal-docs-infra@f334b1c(@types/react@19.2.14)(next@15.5.15(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(prettier@3.8.3)(react@19.2.5)(typescript@6.0.3)':
     dependencies:
       '@babel/runtime': 7.29.2
       '@babel/standalone': 7.29.2
