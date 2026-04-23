@@ -96,3 +96,14 @@
 ::highlight(lzh-attr) {
   color: var(--lzh-this);
 }
+::highlight(lzh-prop) {
+  color: var(--lzh-this);
+}
+::highlight(lzh-cls),
+::highlight(lzh-def),
+::highlight(lzh-type) {
+  color: var(--lzh-fn);
+}
+::highlight(lzh-var) {
+  color: var(--lzh-this);
+}
