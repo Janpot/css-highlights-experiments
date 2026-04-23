@@ -53,6 +53,13 @@ nav.site {
   position: sticky;
   top: 0;
   z-index: 10;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+nav.site > * {
+  flex-shrink: 0;
 }
 
 nav.site a {
@@ -145,10 +152,18 @@ label.toggle {
   background: color-mix(in srgb, currentColor 10%, transparent);
 }
 
+.table-scroll {
+  overflow-x: auto;
+}
+
 table {
   border-collapse: collapse;
   width: 100%;
   font-size: 0.9rem;
+}
+
+.table-scroll table {
+  min-width: 720px;
 }
 
 table th,

@@ -267,7 +267,8 @@ export default function Home() {
         measure an already-running server instead.
         {measuredAt ? ` Last measured ${measuredAt}.` : " Not yet measured."}
       </p>
-      <table>
+      <div className="table-scroll">
+        <table>
         <thead>
           <tr>
             <th>Variant</th>
@@ -312,7 +313,8 @@ export default function Home() {
             })}
           </tbody>
         ))}
-      </table>
+        </table>
+      </div>
 
       <h2>Trade-offs of the CSS Custom Highlight API</h2>
       <ul>
