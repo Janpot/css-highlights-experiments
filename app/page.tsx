@@ -115,8 +115,17 @@ export default function Home() {
         </li>
         <li>
           <a href="/mui">/mui</a> - MUI <code>CodeHighlighter</code> (
-          <code>@mui/internal-docs-infra</code>) for comparison; uses a classic
-          tokens-to-spans approach instead of the CSS Highlight API.
+          <code>@mui/internal-docs-infra</code>) for comparison. Uses{" "}
+          <a
+            href="https://github.com/wooorm/starry-night"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            starry-night
+          </a>{" "}
+          to generate HAST on the server, compresses it with a custom DEFLATE
+          encoding to cross the client boundary, renders plain text during
+          SSR, and expands the HAST into tokens-to-spans after hydration.
         </li>
       </ul>
 
