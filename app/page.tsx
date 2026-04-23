@@ -112,6 +112,29 @@ export default function Home() {
           tokens-to-spans approach instead of the CSS Highlight API.
         </li>
       </ul>
+
+      <h2>Trade-offs</h2>
+      <ul>
+        <li>
+          A token is assigned to a single highlight — you can't combine class
+          styles the way you would with stacked <code>className</code>s on a
+          span. Slight mental-model shift: pick one class per range.
+        </li>
+        <li>
+          <code>::highlight()</code> only supports a limited set of CSS
+          properties (colors, backgrounds, <code>text-decoration</code>, a few
+          others — see{' '}
+          <a
+            href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/::highlight"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            MDN
+          </a>
+          ). No <code>font-weight</code>, no <code>font-style</code>, no custom
+          markers — so bold keywords or italic comments aren't available.
+        </li>
+      </ul>
     </>
   );
 }
