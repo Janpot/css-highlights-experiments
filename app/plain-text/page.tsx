@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { enhance } from '@/lib/enhance';
 import {
   SHORT_CODE,
@@ -8,6 +9,10 @@ import {
 } from '@/lib/samples';
 
 export const dynamic = 'force-static';
+
+export const metadata: Metadata = {
+  title: 'Plain text',
+};
 
 export default function Page() {
   return (

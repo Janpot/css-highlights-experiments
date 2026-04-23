@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { Code } from './Code';
 import {
   SHORT_CODE,
@@ -8,6 +9,10 @@ import {
 } from '@/lib/samples';
 
 export const dynamic = 'force-static';
+
+export const metadata: Metadata = {
+  title: 'MUI CodeHighlighter',
+};
 
 const MUI_LINKED_CODE = LINKED_CODE.replace(
   /^([ \t]*)\/\/ @region-start\s+\S+[ \t]*$/gm,

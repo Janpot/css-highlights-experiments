@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { parser as jsParser } from '@lezer/javascript';
 import { parser as cssParser } from '@lezer/css';
 import CodeBlock from '@/components/CodeBlock';
@@ -11,6 +12,10 @@ import {
 } from '@/lib/samples';
 
 export const dynamic = 'force-static';
+
+export const metadata: Metadata = {
+  title: 'Build-time highlighting (compressed)',
+};
 
 export default function Page() {
   return (

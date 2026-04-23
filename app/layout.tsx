@@ -6,7 +6,10 @@ import Link from 'next/link';
 import ThemeSwitcher from './ThemeSwitcher';
 
 export const metadata: Metadata = {
-  title: 'Lezer + CSS Custom Highlight API',
+  title: {
+    default: 'Lezer + CSS Custom Highlight API',
+    template: '%s · Lezer + CSS Custom Highlight API',
+  },
 };
 
 const themeBootstrap = `(function(){try{var t=localStorage.getItem('highlight-demo-theme');if(t==='theme-light'||t==='theme-dark'||t==='theme-dracula'){document.documentElement.className=t;}}catch(e){}})();`;
@@ -26,6 +29,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <Link href="/editor">Editor</Link>
           <Link href="/mui">MUI</Link>
           <span className="spacer" />
+          <a
+            href="https://github.com/Janpot/css-highlights-experiments"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub
+          </a>
           <ThemeSwitcher />
         </nav>
         <main>{children}</main>

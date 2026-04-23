@@ -1,12 +1,59 @@
+import { parser as jsParser } from '@lezer/javascript';
+import CodeBlock from '@/components/CodeBlock';
+
+const USAGE_SAMPLE = `import { parser } from '@lezer/javascript';
+import CodeBlock from '@/components/CodeBlock';
+
+export default function Page() {
+  return (
+    <CodeBlock
+      code={\`const greeting = 'hello';\`}
+      parser={parser}
+    />
+  );
+}`;
+
 export default function Home() {
   return (
     <>
       <h1>Lezer + CSS Custom Highlight API</h1>
       <p>
-        Syntax highlighting with <code>::highlight()</code>. The DOM stays a plain{' '}
-        <code>&lt;pre&gt;&lt;code&gt;text&lt;/code&gt;&lt;/pre&gt;</code>; token
-        ranges are registered against named highlights.
+        Syntax highlighting with <code>::highlight()</code>. The DOM stays a
+        plain <code>&lt;pre&gt;&lt;code&gt;text&lt;/code&gt;&lt;/pre&gt;</code>;
+        token ranges are registered against named highlights.
       </p>
+
+      <h2>Usage</h2>
+      <p>
+        <code>&lt;CodeBlock&gt;</code> is a server component: it takes the
+        source text and a Lezer parser, runs the parser at render time, and
+        ships only the resulting token ranges to the client — the parser itself
+        never enters the browser bundle.
+      </p>
+      <CodeBlock code={USAGE_SAMPLE} parser={jsParser} />
+
+      <h2>Crossing the client boundary</h2>
+      <p>
+        What actually gets serialized is two fields:
+      </p>
+      <ul>
+        <li>
+          <code>classes</code> — a string array of highlight class names (
+          <code>lzh-kw</code>, <code>lzh-str</code>, …).
+        </li>
+        <li>
+          <code>tokens</code> — a flat number array, grouped per class:{' '}
+          <code>[classIdx, pairCount, Δstart, length, Δstart, length, …]</code>
+          . Starts are stored as deltas from the previous token in the same
+          class, so the numbers stay small even in long files.
+        </li>
+      </ul>
+      <p>
+        The client walks this array and registers each <code>(start, length)</code>{' '}
+        pair against the corresponding CSS Custom Highlight — no per-token
+        object allocation, no spans in the DOM.
+      </p>
+
       <h2>Demos</h2>
       <ul>
         <li>
@@ -32,10 +79,6 @@ export default function Home() {
           tokens-to-spans approach instead of the CSS Highlight API.
         </li>
       </ul>
-      <p>
-        Each block only registers token ranges for the viewport + a small
-        buffer, so pages with many large blocks stay responsive.
-      </p>
     </>
   );
 }
