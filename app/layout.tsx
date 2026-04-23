@@ -27,6 +27,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <Link href="/build-time">Build-time</Link>
           <Link href="/build-time-compressed">Build-time (compressed)</Link>
           <Link href="/html-string">HTML string</Link>
+          <Link href="/html-string-hydrated">HTML string (hydrated)</Link>
           <Link href="/jsx-spans">JSX spans</Link>
           <Link href="/editor">Editor</Link>
           <Link href="/mui">MUI (HAST compressed)</Link>

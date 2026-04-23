@@ -1,5 +1,7 @@
 import { parser as jsParser } from "@lezer/javascript";
 import CodeBlock from "@/components/CodeBlock";
+import { computeHtmlSizes } from "@/lib/compareSizes";
+import { MEDIUM_CODE } from "@/lib/samples";
 
 const tsxParser = jsParser.configure({ dialect: "jsx ts" });
 
@@ -26,7 +28,120 @@ const REACTNODE_SAMPLE = `<CodeBlock
   }
 />`;
 
+interface Row {
+  variant: string;
+  href: string;
+  ssrHtml: "plain" | "spans";
+  serverHighlight: boolean;
+  support: "widely" | "baseline-2026";
+  initialHighlighted: boolean;
+  interactivity: string;
+}
+
+interface Group {
+  label: string;
+  rows: Row[];
+}
+
+const GROUPS: Group[] = [
+  {
+    label: "No highlighting",
+    rows: [
+      {
+        variant: "/plain-text",
+        href: "/plain-text",
+        ssrHtml: "plain",
+        serverHighlight: false,
+        support: "widely",
+        initialHighlighted: false,
+        interactivity: "React components",
+      },
+    ],
+  },
+  {
+    label: "CSS Custom Highlight API",
+    rows: [
+      {
+        variant: "/build-time",
+        href: "/build-time",
+        ssrHtml: "plain",
+        serverHighlight: true,
+        support: "baseline-2026",
+        initialHighlighted: false,
+        interactivity: "React components",
+      },
+      {
+        variant: "/build-time-compressed",
+        href: "/build-time-compressed",
+        ssrHtml: "plain",
+        serverHighlight: true,
+        support: "baseline-2026",
+        initialHighlighted: false,
+        interactivity: "React components",
+      },
+    ],
+  },
+  {
+    label: "Span-based",
+    rows: [
+      {
+        variant: "/html-string",
+        href: "/html-string",
+        ssrHtml: "spans",
+        serverHighlight: true,
+        support: "widely",
+        initialHighlighted: true,
+        interactivity: "event delegation",
+      },
+      {
+        variant: "/html-string-hydrated",
+        href: "/html-string-hydrated",
+        ssrHtml: "plain",
+        serverHighlight: true,
+        support: "widely",
+        initialHighlighted: false,
+        interactivity: "event delegation",
+      },
+      {
+        variant: "/jsx-spans",
+        href: "/jsx-spans",
+        ssrHtml: "spans",
+        serverHighlight: true,
+        support: "widely",
+        initialHighlighted: true,
+        interactivity: "React components",
+      },
+      {
+        variant: "/mui",
+        href: "/mui",
+        ssrHtml: "plain",
+        serverHighlight: true,
+        support: "widely",
+        initialHighlighted: false,
+        interactivity: "React components",
+      },
+    ],
+  },
+];
+
+function formatBytes(n: number): string {
+  if (n < 1024) return `${n} B`;
+  return `${(n / 1024).toFixed(1)} KB`;
+}
+
+function YesNo({ value }: { value: boolean }) {
+  return (
+    <span
+      className={value ? "yn yn-yes" : "yn yn-no"}
+      aria-label={value ? "yes" : "no"}
+    >
+      {value ? "✓" : "✕"}
+    </span>
+  );
+}
+
 export default function Home() {
+  const sizes = computeHtmlSizes(MEDIUM_CODE);
   return (
     <>
       <h1>Lezer + CSS Custom Highlight API</h1>
@@ -110,6 +225,12 @@ export default function Home() {
           same spans as nested JSX children of <code>&lt;code&gt;</code>.
         </li>
         <li>
+          <a href="/html-string-hydrated">/html-string-hydrated</a> - server
+          generates the highlighted HTML string and ships it as a prop; SSR
+          renders plain text, the client swaps in the highlighted HTML after
+          hydration.
+        </li>
+        <li>
           <a href="/editor">/editor</a> - <code>contenteditable</code> with live
           re-parsing, optional incremental parsing.
         </li>
@@ -124,12 +245,66 @@ export default function Home() {
             starry-night
           </a>{" "}
           to generate HAST on the server, compresses it with a custom DEFLATE
-          encoding to cross the client boundary, renders plain text during
-          SSR, and expands the HAST into tokens-to-spans after hydration.
+          encoding to cross the client boundary, renders plain text during SSR,
+          and expands the HAST into tokens-to-spans after hydration.
         </li>
       </ul>
 
-      <h2>Trade-offs</h2>
+      <h2>Comparison</h2>
+      <p>
+        SSR HTML byte counts are measured for the <code>MEDIUM_CODE</code>{" "}
+        sample, counting only the{" "}
+        <code>&lt;pre&gt;&lt;code&gt;…&lt;/code&gt;</code>
+        markup emitted during SSR (not the RSC payload or hydration data).
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Variant</th>
+            <th>Uncompressed HTML</th>
+            <th>gzip HTML</th>
+            <th>Server-side highlighting</th>
+            <th>Browser support</th>
+            <th>Initial HTML highlighted</th>
+            <th>Interactivity</th>
+          </tr>
+        </thead>
+        {GROUPS.map((g) => (
+          <tbody key={g.label}>
+            <tr>
+              <th colSpan={7} scope="colgroup">
+                {g.label}
+              </th>
+            </tr>
+            {g.rows.map((r) => {
+              const s = r.ssrHtml === "spans" ? sizes.spans : sizes.plain;
+              return (
+                <tr key={r.variant}>
+                  <td>
+                    <a href={r.href}>{r.variant}</a>
+                  </td>
+                  <td>{formatBytes(s.raw)}</td>
+                  <td>{formatBytes(s.gz)}</td>
+                  <td>
+                    <YesNo value={r.serverHighlight} />
+                  </td>
+                  <td>
+                    {r.support === "widely"
+                      ? "widely available"
+                      : "Baseline 2026"}
+                  </td>
+                  <td>
+                    <YesNo value={r.initialHighlighted} />
+                  </td>
+                  <td>{r.interactivity}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        ))}
+      </table>
+
+      <h2>Trade-offs of the CSS Custom Highlight API</h2>
       <ul>
         <li>
           A token is assigned to a single highlight - you can't combine class
