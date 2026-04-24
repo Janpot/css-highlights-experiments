@@ -326,17 +326,17 @@ export default function Home() {
           <thead>
             <tr>
               <th rowSpan={2}>Variant</th>
-              <th rowSpan={2}>Uncompressed HTML</th>
-              <th rowSpan={2}>Compressed HTML</th>
-              <th rowSpan={2}>TTFB (ms)</th>
-              <th rowSpan={2}>FCP (ms)</th>
-              <th rowSpan={2}>LCP (ms)</th>
-              <th rowSpan={2}>INP (ms)</th>
-              <th rowSpan={2}>CLS</th>
-              <th colSpan={3} scope="colgroup">
+              <th className="num" rowSpan={2}>Uncompressed HTML</th>
+              <th className="num" rowSpan={2}>Compressed HTML</th>
+              <th className="num" rowSpan={2}>TTFB (ms)</th>
+              <th className="num" rowSpan={2}>FCP (ms)</th>
+              <th className="num" rowSpan={2}>LCP (ms)</th>
+              <th className="num" rowSpan={2}>INP (ms)</th>
+              <th className="num" rowSpan={2}>CLS</th>
+              <th className="num" colSpan={3} scope="colgroup">
                 Before scroll (ms)
               </th>
-              <th colSpan={3} scope="colgroup">
+              <th className="num" colSpan={3} scope="colgroup">
                 After scroll (ms)
               </th>
               <th className="yn-cell" rowSpan={2}>
@@ -349,12 +349,12 @@ export default function Home() {
               <th rowSpan={2}>Interactivity</th>
             </tr>
             <tr>
-              <th>Script</th>
-              <th>Layout</th>
-              <th>Paint</th>
-              <th>Script</th>
-              <th>Layout</th>
-              <th>Paint</th>
+              <th className="num">Script</th>
+              <th className="num">Layout</th>
+              <th className="num">Paint</th>
+              <th className="num">Script</th>
+              <th className="num">Layout</th>
+              <th className="num">Paint</th>
             </tr>
           </thead>
           {GROUPS.map((g) => {
@@ -377,23 +377,23 @@ export default function Home() {
                     <td>
                       <a href={r.href}>{r.variant}</a>
                     </td>
-                    <td>{s ? formatBytes(s.uncompressed) : "—"}</td>
-                    <td>
+                    <td className="num">{s ? formatBytes(s.uncompressed) : "—"}</td>
+                    <td className="num">
                       {s
                         ? `${formatBytes(s.compressed)}${s.encoding ? ` (${s.encoding})` : ""}`
                         : "—"}
                     </td>
-                    <td>{formatMs(wv?.ttfb)}</td>
-                    <td>{formatMs(wv?.fcp)}</td>
-                    <td>{formatMs(wv?.lcp)}</td>
-                    <td>{formatMs(wv?.inp)}</td>
-                    <td>{formatCls(wv?.cls)}</td>
-                    <td>{formatMs(t?.before?.scripting)}</td>
-                    <td>{formatMs(t?.before?.layout)}</td>
-                    <td>{formatMs(t?.before?.paint)}</td>
-                    <td>{formatMs(t?.after?.scripting)}</td>
-                    <td>{formatMs(t?.after?.layout)}</td>
-                    <td>{formatMs(t?.after?.paint)}</td>
+                    <td className="num">{formatMs(wv?.ttfb)}</td>
+                    <td className="num">{formatMs(wv?.fcp)}</td>
+                    <td className="num">{formatMs(wv?.lcp)}</td>
+                    <td className="num">{formatMs(wv?.inp)}</td>
+                    <td className="num">{formatCls(wv?.cls)}</td>
+                    <td className="num">{formatMs(t?.before?.scripting)}</td>
+                    <td className="num">{formatMs(t?.before?.layout)}</td>
+                    <td className="num">{formatMs(t?.before?.paint)}</td>
+                    <td className="num">{formatMs(t?.after?.scripting)}</td>
+                    <td className="num">{formatMs(t?.after?.layout)}</td>
+                    <td className="num">{formatMs(t?.after?.paint)}</td>
                     <td className="yn-cell">
                       {r.serverHighlight === null ? (
                         "—"

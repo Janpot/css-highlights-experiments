@@ -208,6 +208,11 @@ table thead th {
   text-align: center;
 }
 
+.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
 .yn {
   display: inline-block;
   width: 1.25rem;
