@@ -1,172 +1,172 @@
 {
   "base": "https://css-highlights-experiments.vercel.app",
-  "measuredAt": "2026-04-24T05:17:46.046Z",
+  "measuredAt": "2026-04-24T12:02:39.325Z",
   "pages": {
     "/plain-text": {
-      "compressed": 5523,
+      "compressed": 5532,
       "uncompressed": 68066,
       "encoding": "br",
       "webVitals": {
-        "ttfb": 81.79999999701977,
-        "fcp": 160,
-        "lcp": 160,
+        "ttfb": 103.77499999850988,
+        "fcp": 193,
+        "lcp": 193,
         "inp": 8,
         "cls": 0
       },
       "timings": {
         "before": {
-          "scripting": 78.452,
-          "layout": 17.568,
-          "paint": 1.021
+          "scripting": 80.676,
+          "layout": 18.7045,
+          "paint": 1.075
         },
         "after": {
-          "scripting": 55.712,
-          "layout": 1.608,
-          "paint": 23.358
+          "scripting": 54.42225,
+          "layout": 1.75075,
+          "paint": 24.50475
         }
       }
     },
     "/build-time": {
-      "compressed": 7016,
+      "compressed": 7022,
       "uncompressed": 103750,
       "encoding": "br",
       "webVitals": {
-        "ttfb": 100.79999999701977,
-        "fcp": 180,
-        "lcp": 180,
+        "ttfb": 103.20000000298023,
+        "fcp": 192,
+        "lcp": 192,
         "inp": 8,
         "cls": 0
       },
       "timings": {
         "before": {
-          "scripting": 95.453,
-          "layout": 16.574,
-          "paint": 6.947
+          "scripting": 99.644,
+          "layout": 17.61575,
+          "paint": 7.186
         },
         "after": {
-          "scripting": 56.501,
-          "layout": 1.48,
-          "paint": 97.958
+          "scripting": 54.72625,
+          "layout": 1.7305000000000001,
+          "paint": 110.06400000000001
         }
       }
     },
     "/build-time-compressed": {
-      "compressed": 7813,
+      "compressed": 7823,
       "uncompressed": 89444,
       "encoding": "br",
       "webVitals": {
-        "ttfb": 83.69999998807907,
-        "fcp": 160,
-        "lcp": 160,
+        "ttfb": 99.60000001639128,
+        "fcp": 188,
+        "lcp": 188,
         "inp": 8,
         "cls": 0
       },
       "timings": {
         "before": {
-          "scripting": 89.949,
-          "layout": 16.536,
-          "paint": 7.144
+          "scripting": 91.9715,
+          "layout": 17.23625,
+          "paint": 7.13575
         },
         "after": {
-          "scripting": 56.764,
-          "layout": 1.507,
-          "paint": 101.895
+          "scripting": 54.301500000000004,
+          "layout": 1.6797499999999999,
+          "paint": 107.16725
         }
       }
     },
     "/html-string": {
-      "compressed": 8670,
+      "compressed": 8672,
       "uncompressed": 647984,
       "encoding": "br",
       "webVitals": {
-        "ttfb": 104.3999999910593,
-        "fcp": 240,
-        "lcp": 240,
+        "ttfb": 105.3500000089407,
+        "fcp": 236,
+        "lcp": 236,
         "inp": 16,
         "cls": 0
       },
       "timings": {
         "before": {
-          "scripting": 78.183,
-          "layout": 52.251,
-          "paint": 1.408
+          "scripting": 78.6365,
+          "layout": 57.1565,
+          "paint": 1.4449999999999998
         },
         "after": {
-          "scripting": 52.259,
-          "layout": 2.277,
-          "paint": 112.659
+          "scripting": 55.2385,
+          "layout": 2.516,
+          "paint": 132.96275
         }
       }
     },
     "/html-string-hydrated": {
-      "compressed": 8516,
+      "compressed": 8526,
       "uncompressed": 466765,
       "encoding": "br",
       "webVitals": {
-        "ttfb": 91.09999999403954,
-        "fcp": 180,
-        "lcp": 180,
+        "ttfb": 106.17499999701977,
+        "fcp": 222,
+        "lcp": 222,
         "inp": 16,
         "cls": 0
       },
       "timings": {
         "before": {
-          "scripting": 82.882,
-          "layout": 45.297,
-          "paint": 1.446
+          "scripting": 84.2755,
+          "layout": 47.172,
+          "paint": 1.49425
         },
         "after": {
-          "scripting": 58.364,
-          "layout": 2.292,
-          "paint": 136.218
+          "scripting": 55.476,
+          "layout": 2.4539999999999997,
+          "paint": 126.81175
         }
       }
     },
     "/jsx-spans": {
-      "compressed": 84510,
+      "compressed": 84511,
       "uncompressed": 926160,
       "encoding": "br",
       "webVitals": {
-        "ttfb": 92.6000000089407,
-        "fcp": 224,
-        "lcp": 224,
+        "ttfb": 109.8500000089407,
+        "fcp": 257,
+        "lcp": 257,
         "inp": 16,
         "cls": 0
       },
       "timings": {
         "before": {
-          "scripting": 100.531,
-          "layout": 52.809,
-          "paint": 1.393
+          "scripting": 106.12349999999999,
+          "layout": 57.2355,
+          "paint": 1.452
         },
         "after": {
-          "scripting": 57.227,
-          "layout": 2.508,
-          "paint": 134.299
+          "scripting": 55.529,
+          "layout": 2.214,
+          "paint": 123.51725
         }
       }
     },
     "/mui": {
-      "compressed": 22980,
-      "uncompressed": 68105,
+      "compressed": 22982,
+      "uncompressed": 68113,
       "encoding": "br",
       "webVitals": {
-        "ttfb": 79.30000001192093,
-        "fcp": 160,
-        "lcp": 160,
+        "ttfb": 100.17500000447035,
+        "fcp": 196,
+        "lcp": 196,
         "inp": 32,
         "cls": 0.13510837554931643
       },
       "timings": {
         "before": {
-          "scripting": 93.681,
-          "layout": 17.244,
-          "paint": 1.214
+          "scripting": 102.52625,
+          "layout": 18.1845,
+          "paint": 1.17675
         },
         "after": {
-          "scripting": 193.828,
-          "layout": 153.116,
-          "paint": 80.213
+          "scripting": 165.41025,
+          "layout": 138.3885,
+          "paint": 62.17475
         }
       }
     }
