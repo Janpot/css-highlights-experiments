@@ -165,6 +165,88 @@ function formatCls(n: number | null | undefined): string {
   return n.toFixed(3);
 }
 
+const METRIC_KEYS = [
+  "uncompressed",
+  "compressed",
+  "ttfb",
+  "fcp",
+  "lcp",
+  "inp",
+  "cls",
+  "before.scripting",
+  "before.layout",
+  "before.paint",
+  "after.scripting",
+  "after.layout",
+  "after.paint",
+] as const;
+type MetricKey = (typeof METRIC_KEYS)[number];
+
+function getMetric(href: string, key: MetricKey): number | null {
+  const s = sizeMap[href];
+  if (!s) return null;
+  switch (key) {
+    case "uncompressed":
+      return s.uncompressed;
+    case "compressed":
+      return s.compressed;
+    case "ttfb":
+      return s.webVitals?.ttfb ?? null;
+    case "fcp":
+      return s.webVitals?.fcp ?? null;
+    case "lcp":
+      return s.webVitals?.lcp ?? null;
+    case "inp":
+      return s.webVitals?.inp ?? null;
+    case "cls":
+      return s.webVitals?.cls ?? null;
+    case "before.scripting":
+      return s.timings?.before?.scripting ?? null;
+    case "before.layout":
+      return s.timings?.before?.layout ?? null;
+    case "before.paint":
+      return s.timings?.before?.paint ?? null;
+    case "after.scripting":
+      return s.timings?.after?.scripting ?? null;
+    case "after.layout":
+      return s.timings?.after?.layout ?? null;
+    case "after.paint":
+      return s.timings?.after?.paint ?? null;
+  }
+}
+
+const allHrefs = GROUPS.flatMap((g) => g.rows.map((r) => r.href)).filter(
+  (h) => h !== "/plain-text",
+);
+const extremes: Record<MetricKey, { min: number; max: number } | null> =
+  Object.fromEntries(
+    METRIC_KEYS.map((key) => {
+      const values = allHrefs
+        .map((h) => getMetric(h, key))
+        .filter((v): v is number => v != null);
+      if (values.length < 2) return [key, null];
+      const min = Math.min(...values);
+      const max = Math.max(...values);
+      if (min === max) return [key, null];
+      return [key, { min, max }];
+    }),
+  ) as Record<MetricKey, { min: number; max: number } | null>;
+
+function numCellProps(
+  href: string,
+  key: MetricKey,
+): { className: string; style?: React.CSSProperties } {
+  if (!allHrefs.includes(href)) return { className: "num" };
+  const v = getMetric(href, key);
+  const ex = extremes[key];
+  if (v == null || !ex) return { className: "num" };
+  const t = (v - ex.min) / (ex.max - ex.min);
+  return {
+    className: "num num-scale",
+    style: { "--t": t.toFixed(4) } as React.CSSProperties,
+  };
+}
+
 function slugify(text: string): string {
   return text
     .toLowerCase()
@@ -172,13 +254,7 @@ function slugify(text: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-function Heading({
-  as: Tag,
-  children,
-}: {
-  as: "h2" | "h3";
-  children: string;
-}) {
+function Heading({ as: Tag, children }: { as: "h2" | "h3"; children: string }) {
   const id = slugify(children);
   return (
     <Tag id={id}>
@@ -326,13 +402,27 @@ export default function Home() {
           <thead>
             <tr>
               <th rowSpan={2}>Variant</th>
-              <th className="num" rowSpan={2}>Uncompressed HTML</th>
-              <th className="num" rowSpan={2}>Compressed HTML</th>
-              <th className="num" rowSpan={2}>TTFB (ms)</th>
-              <th className="num" rowSpan={2}>FCP (ms)</th>
-              <th className="num" rowSpan={2}>LCP (ms)</th>
-              <th className="num" rowSpan={2}>INP (ms)</th>
-              <th className="num" rowSpan={2}>CLS</th>
+              <th className="num" rowSpan={2}>
+                Uncompressed HTML
+              </th>
+              <th className="num" rowSpan={2}>
+                Compressed HTML
+              </th>
+              <th className="num" rowSpan={2}>
+                TTFB (ms)
+              </th>
+              <th className="num" rowSpan={2}>
+                FCP (ms)
+              </th>
+              <th className="num" rowSpan={2}>
+                LCP (ms)
+              </th>
+              <th className="num" rowSpan={2}>
+                INP (ms)
+              </th>
+              <th className="num" rowSpan={2}>
+                CLS
+              </th>
               <th className="num" colSpan={3} scope="colgroup">
                 Before scroll (ms)
               </th>
@@ -360,60 +450,84 @@ export default function Home() {
           {GROUPS.map((g) => {
             const groupId = `group-${slugify(g.label)}`;
             return (
-            <tbody key={g.label}>
-              <tr>
-                <th id={groupId} colSpan={18} scope="colgroup">
-                  <a href={`#${groupId}`} className="anchor-link">
-                    {g.label}
-                  </a>
-                </th>
-              </tr>
-              {g.rows.map((r) => {
-                const s = sizeMap[r.href];
-                const wv = s?.webVitals;
-                const t = s?.timings;
-                return (
-                  <tr key={r.variant}>
-                    <td>
-                      <a href={r.href}>{r.variant}</a>
-                    </td>
-                    <td className="num">{s ? formatBytes(s.uncompressed) : "—"}</td>
-                    <td className="num">
-                      {s
-                        ? `${formatBytes(s.compressed)}${s.encoding ? ` (${s.encoding})` : ""}`
-                        : "—"}
-                    </td>
-                    <td className="num">{formatMs(wv?.ttfb)}</td>
-                    <td className="num">{formatMs(wv?.fcp)}</td>
-                    <td className="num">{formatMs(wv?.lcp)}</td>
-                    <td className="num">{formatMs(wv?.inp)}</td>
-                    <td className="num">{formatCls(wv?.cls)}</td>
-                    <td className="num">{formatMs(t?.before?.scripting)}</td>
-                    <td className="num">{formatMs(t?.before?.layout)}</td>
-                    <td className="num">{formatMs(t?.before?.paint)}</td>
-                    <td className="num">{formatMs(t?.after?.scripting)}</td>
-                    <td className="num">{formatMs(t?.after?.layout)}</td>
-                    <td className="num">{formatMs(t?.after?.paint)}</td>
-                    <td className="yn-cell">
-                      {r.serverHighlight === null ? (
-                        "—"
-                      ) : (
-                        <YesNo value={r.serverHighlight} />
-                      )}
-                    </td>
-                    <td>
-                      {r.support === "widely"
-                        ? "widely available"
-                        : "Baseline 2026"}
-                    </td>
-                    <td className="yn-cell">
-                      <YesNo value={r.initialHighlighted} />
-                    </td>
-                    <td>{r.interactivity}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
+              <tbody key={g.label}>
+                <tr>
+                  <th id={groupId} colSpan={18} scope="colgroup">
+                    <a href={`#${groupId}`} className="anchor-link">
+                      {g.label}
+                    </a>
+                  </th>
+                </tr>
+                {g.rows.map((r) => {
+                  const s = sizeMap[r.href];
+                  const wv = s?.webVitals;
+                  const t = s?.timings;
+                  return (
+                    <tr key={r.variant}>
+                      <td>
+                        <a href={r.href}>{r.variant}</a>
+                      </td>
+                      <td {...numCellProps(r.href, "uncompressed")}>
+                        {s ? formatBytes(s.uncompressed) : "—"}
+                      </td>
+                      <td {...numCellProps(r.href, "compressed")}>
+                        {s
+                          ? `${formatBytes(s.compressed)}${s.encoding ? ` (${s.encoding})` : ""}`
+                          : "—"}
+                      </td>
+                      <td {...numCellProps(r.href, "ttfb")}>
+                        {formatMs(wv?.ttfb)}
+                      </td>
+                      <td {...numCellProps(r.href, "fcp")}>
+                        {formatMs(wv?.fcp)}
+                      </td>
+                      <td {...numCellProps(r.href, "lcp")}>
+                        {formatMs(wv?.lcp)}
+                      </td>
+                      <td {...numCellProps(r.href, "inp")}>
+                        {formatMs(wv?.inp)}
+                      </td>
+                      <td {...numCellProps(r.href, "cls")}>
+                        {formatCls(wv?.cls)}
+                      </td>
+                      <td {...numCellProps(r.href, "before.scripting")}>
+                        {formatMs(t?.before?.scripting)}
+                      </td>
+                      <td {...numCellProps(r.href, "before.layout")}>
+                        {formatMs(t?.before?.layout)}
+                      </td>
+                      <td {...numCellProps(r.href, "before.paint")}>
+                        {formatMs(t?.before?.paint)}
+                      </td>
+                      <td {...numCellProps(r.href, "after.scripting")}>
+                        {formatMs(t?.after?.scripting)}
+                      </td>
+                      <td {...numCellProps(r.href, "after.layout")}>
+                        {formatMs(t?.after?.layout)}
+                      </td>
+                      <td {...numCellProps(r.href, "after.paint")}>
+                        {formatMs(t?.after?.paint)}
+                      </td>
+                      <td className="yn-cell">
+                        {r.serverHighlight === null ? (
+                          "—"
+                        ) : (
+                          <YesNo value={r.serverHighlight} />
+                        )}
+                      </td>
+                      <td>
+                        {r.support === "widely"
+                          ? "widely available"
+                          : "Baseline 2026"}
+                      </td>
+                      <td className="yn-cell">
+                        <YesNo value={r.initialHighlighted} />
+                      </td>
+                      <td>{r.interactivity}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
             );
           })}
         </table>
@@ -422,21 +536,21 @@ export default function Home() {
         Web Vitals (TTFB, FCP, LCP, INP, CLS) are collected by{" "}
         <code>pnpm measure</code> via Playwright: each variant is loaded in a
         real Chromium page, <code>useReportWebVitals</code> forwards metrics to
-        the Node runner, and a synthetic click + tab keystroke trigger INP.
-        Each variant is measured across 20 runs and the table shows the 75th
+        the Node runner, and a synthetic click + tab keystroke trigger INP. Each
+        variant is measured across 20 runs and the table shows the 75th
         percentile. Numbers reflect unthrottled local rendering.
       </p>
       <p style={{ fontSize: "0.9em", opacity: 0.7 }}>
         The Before/After scroll timings come from a Chrome DevTools Protocol{" "}
         <code>Tracing</code> session over the same Playwright run. The page is
         loaded and left to settle, a <code>performance.mark</code> delimits the
-        &quot;before scroll&quot; window, the runner scrolls through the page
-        to the bottom and back, and a second mark closes the &quot;after
-        scroll&quot; window. Trace events are bucketed by self-time into
-        Script (JS execution, parsing, compile), Layout (style recalc,
-        layout), and Paint (paint, composite, raster) - so you can see how
-        much work each variant does at first render vs. during scroll. Each
-        variant runs 20 times and the table shows the 75th percentile.
+        &quot;before scroll&quot; window, the runner scrolls through the page to
+        the bottom and back, and a second mark closes the &quot;after
+        scroll&quot; window. Trace events are bucketed by self-time into Script
+        (JS execution, parsing, compile), Layout (style recalc, layout), and
+        Paint (paint, composite, raster) - so you can see how much work each
+        variant does at first render vs. during scroll. Each variant runs 20
+        times and the table shows the 75th percentile.
       </p>
 
       <Heading as="h2">Trade-offs of the CSS Custom Highlight API</Heading>
