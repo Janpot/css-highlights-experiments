@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import ThemeSwitcher from './ThemeSwitcher';
+import WebVitalsReporter from '@/components/WebVitalsReporter';
 
 export const metadata: Metadata = {
   title: {
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <ThemeSwitcher />
         </nav>
         <main>{children}</main>
+        <WebVitalsReporter />
       </body>
     </html>
   );
