@@ -2,12 +2,31 @@ import { parser as jsParser } from "@lezer/javascript";
 import CodeBlock from "@/components/CodeBlock";
 import pageSizes from "@/data/pageSizes.json";
 
+interface WebVitals {
+  ttfb: number | null;
+  fcp: number | null;
+  lcp: number | null;
+  inp: number | null;
+  cls: number | null;
+}
+interface TimingBucket {
+  scripting: number | null;
+  layout: number | null;
+  paint: number | null;
+}
+interface Timings {
+  before: TimingBucket;
+  after: TimingBucket;
+}
 interface PageSize {
   compressed: number;
   uncompressed: number;
   encoding: string | null;
+  webVitals?: WebVitals;
+  timings?: Timings;
 }
-const sizeMap = (pageSizes as { pages: Record<string, PageSize> }).pages;
+const sizeMap = (pageSizes as unknown as { pages: Record<string, PageSize> })
+  .pages;
 const measuredAt = (pageSizes as { measuredAt: string | null }).measuredAt;
 
 const tsxParser = jsParser.configure({ dialect: "jsx ts" });
@@ -38,7 +57,7 @@ const REACTNODE_SAMPLE = `<CodeBlock
 interface Row {
   variant: string;
   href: string;
-  serverHighlight: boolean;
+  serverHighlight: boolean | null;
   support: "widely" | "baseline-2026";
   initialHighlighted: boolean;
   interactivity: string;
@@ -56,7 +75,7 @@ const GROUPS: Group[] = [
       {
         variant: "/plain-text",
         href: "/plain-text",
-        serverHighlight: false,
+        serverHighlight: null,
         support: "widely",
         initialHighlighted: false,
         interactivity: "React components",
@@ -133,6 +152,17 @@ const byteFormatter = new Intl.NumberFormat("en-US", {
 
 function formatBytes(n: number): string {
   return byteFormatter.format(n);
+}
+
+function formatMs(n: number | null | undefined): string {
+  if (n == null) return "—";
+  if (n < 10) return n.toFixed(1);
+  return Math.round(n).toLocaleString();
+}
+
+function formatCls(n: number | null | undefined): string {
+  if (n == null) return "—";
+  return n.toFixed(3);
 }
 
 function YesNo({ value }: { value: boolean }) {
@@ -269,52 +299,99 @@ export default function Home() {
       </p>
       <div className="table-scroll">
         <table>
-        <thead>
-          <tr>
-            <th>Variant</th>
-            <th>Uncompressed HTML</th>
-            <th>gzip HTML</th>
-            <th className="yn-cell">Server-side highlighting</th>
-            <th>Browser support</th>
-            <th className="yn-cell">Initial HTML highlighted</th>
-            <th>Interactivity</th>
-          </tr>
-        </thead>
-        {GROUPS.map((g) => (
-          <tbody key={g.label}>
+          <thead>
             <tr>
-              <th colSpan={7} scope="colgroup">
-                {g.label}
+              <th rowSpan={2}>Variant</th>
+              <th rowSpan={2}>Uncompressed HTML</th>
+              <th rowSpan={2}>gzip HTML</th>
+              <th rowSpan={2}>TTFB (ms)</th>
+              <th rowSpan={2}>FCP (ms)</th>
+              <th rowSpan={2}>LCP (ms)</th>
+              <th rowSpan={2}>INP (ms)</th>
+              <th rowSpan={2}>CLS</th>
+              <th colSpan={3} scope="colgroup">
+                Before scroll (ms)
               </th>
+              <th colSpan={3} scope="colgroup">
+                After scroll (ms)
+              </th>
+              <th className="yn-cell" rowSpan={2}>
+                Server-side highlighting
+              </th>
+              <th rowSpan={2}>Browser support</th>
+              <th className="yn-cell" rowSpan={2}>
+                Initial HTML highlighted
+              </th>
+              <th rowSpan={2}>Interactivity</th>
             </tr>
-            {g.rows.map((r) => {
-              const s = sizeMap[r.href];
-              return (
-                <tr key={r.variant}>
-                  <td>
-                    <a href={r.href}>{r.variant}</a>
-                  </td>
-                  <td>{s ? formatBytes(s.uncompressed) : "—"}</td>
-                  <td>{s ? formatBytes(s.compressed) : "—"}</td>
-                  <td className="yn-cell">
-                    <YesNo value={r.serverHighlight} />
-                  </td>
-                  <td>
-                    {r.support === "widely"
-                      ? "widely available"
-                      : "Baseline 2026"}
-                  </td>
-                  <td className="yn-cell">
-                    <YesNo value={r.initialHighlighted} />
-                  </td>
-                  <td>{r.interactivity}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        ))}
+            <tr>
+              <th>Script</th>
+              <th>Layout</th>
+              <th>Paint</th>
+              <th>Script</th>
+              <th>Layout</th>
+              <th>Paint</th>
+            </tr>
+          </thead>
+          {GROUPS.map((g) => (
+            <tbody key={g.label}>
+              <tr>
+                <th colSpan={18} scope="colgroup">
+                  {g.label}
+                </th>
+              </tr>
+              {g.rows.map((r) => {
+                const s = sizeMap[r.href];
+                const wv = s?.webVitals;
+                const t = s?.timings;
+                return (
+                  <tr key={r.variant}>
+                    <td>
+                      <a href={r.href}>{r.variant}</a>
+                    </td>
+                    <td>{s ? formatBytes(s.uncompressed) : "—"}</td>
+                    <td>{s ? formatBytes(s.compressed) : "—"}</td>
+                    <td>{formatMs(wv?.ttfb)}</td>
+                    <td>{formatMs(wv?.fcp)}</td>
+                    <td>{formatMs(wv?.lcp)}</td>
+                    <td>{formatMs(wv?.inp)}</td>
+                    <td>{formatCls(wv?.cls)}</td>
+                    <td>{formatMs(t?.before?.scripting)}</td>
+                    <td>{formatMs(t?.before?.layout)}</td>
+                    <td>{formatMs(t?.before?.paint)}</td>
+                    <td>{formatMs(t?.after?.scripting)}</td>
+                    <td>{formatMs(t?.after?.layout)}</td>
+                    <td>{formatMs(t?.after?.paint)}</td>
+                    <td className="yn-cell">
+                      {r.serverHighlight === null ? (
+                        "—"
+                      ) : (
+                        <YesNo value={r.serverHighlight} />
+                      )}
+                    </td>
+                    <td>
+                      {r.support === "widely"
+                        ? "widely available"
+                        : "Baseline 2026"}
+                    </td>
+                    <td className="yn-cell">
+                      <YesNo value={r.initialHighlighted} />
+                    </td>
+                    <td>{r.interactivity}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          ))}
         </table>
       </div>
+      <p style={{ fontSize: "0.9em", opacity: 0.7 }}>
+        Web Vitals (TTFB, FCP, LCP, INP, CLS) are collected by{" "}
+        <code>pnpm measure</code> via Playwright: each variant is loaded in a
+        real Chromium page, <code>useReportWebVitals</code> forwards metrics to
+        the Node runner, and a synthetic click + tab keystroke trigger INP.
+        Numbers reflect unthrottled local rendering.
+      </p>
 
       <h2>Trade-offs of the CSS Custom Highlight API</h2>
       <ul>

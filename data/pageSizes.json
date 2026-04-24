@@ -1,41 +1,174 @@
 {
-  "base": "http://localhost:3100",
-  "measuredAt": "2026-04-23T17:57:30.946Z",
+  "base": "https://css-highlights-experiments.vercel.app",
+  "measuredAt": "2026-04-24T05:17:46.046Z",
   "pages": {
     "/plain-text": {
-      "compressed": 6296,
-      "uncompressed": 67958,
-      "encoding": "gzip"
+      "compressed": 5523,
+      "uncompressed": 68066,
+      "encoding": "br",
+      "webVitals": {
+        "ttfb": 81.79999999701977,
+        "fcp": 160,
+        "lcp": 160,
+        "inp": 8,
+        "cls": 0
+      },
+      "timings": {
+        "before": {
+          "scripting": 78.452,
+          "layout": 17.568,
+          "paint": 1.021
+        },
+        "after": {
+          "scripting": 55.712,
+          "layout": 1.608,
+          "paint": 23.358
+        }
+      }
     },
     "/build-time": {
-      "compressed": 8284,
-      "uncompressed": 103642,
-      "encoding": "gzip"
+      "compressed": 7016,
+      "uncompressed": 103750,
+      "encoding": "br",
+      "webVitals": {
+        "ttfb": 100.79999999701977,
+        "fcp": 180,
+        "lcp": 180,
+        "inp": 8,
+        "cls": 0
+      },
+      "timings": {
+        "before": {
+          "scripting": 95.453,
+          "layout": 16.574,
+          "paint": 6.947
+        },
+        "after": {
+          "scripting": 56.501,
+          "layout": 1.48,
+          "paint": 97.958
+        }
+      }
     },
     "/build-time-compressed": {
-      "compressed": 9036,
-      "uncompressed": 89336,
-      "encoding": "gzip"
+      "compressed": 7813,
+      "uncompressed": 89444,
+      "encoding": "br",
+      "webVitals": {
+        "ttfb": 83.69999998807907,
+        "fcp": 160,
+        "lcp": 160,
+        "inp": 8,
+        "cls": 0
+      },
+      "timings": {
+        "before": {
+          "scripting": 89.949,
+          "layout": 16.536,
+          "paint": 7.144
+        },
+        "after": {
+          "scripting": 56.764,
+          "layout": 1.507,
+          "paint": 101.895
+        }
+      }
     },
     "/html-string": {
-      "compressed": 16621,
-      "uncompressed": 647876,
-      "encoding": "gzip"
+      "compressed": 8670,
+      "uncompressed": 647984,
+      "encoding": "br",
+      "webVitals": {
+        "ttfb": 104.3999999910593,
+        "fcp": 240,
+        "lcp": 240,
+        "inp": 16,
+        "cls": 0
+      },
+      "timings": {
+        "before": {
+          "scripting": 78.183,
+          "layout": 52.251,
+          "paint": 1.408
+        },
+        "after": {
+          "scripting": 52.259,
+          "layout": 2.277,
+          "paint": 112.659
+        }
+      }
     },
     "/html-string-hydrated": {
-      "compressed": 15046,
-      "uncompressed": 466657,
-      "encoding": "gzip"
+      "compressed": 8516,
+      "uncompressed": 466765,
+      "encoding": "br",
+      "webVitals": {
+        "ttfb": 91.09999999403954,
+        "fcp": 180,
+        "lcp": 180,
+        "inp": 16,
+        "cls": 0
+      },
+      "timings": {
+        "before": {
+          "scripting": 82.882,
+          "layout": 45.297,
+          "paint": 1.446
+        },
+        "after": {
+          "scripting": 58.364,
+          "layout": 2.292,
+          "paint": 136.218
+        }
+      }
     },
     "/jsx-spans": {
-      "compressed": 89629,
-      "uncompressed": 926048,
-      "encoding": "gzip"
+      "compressed": 84510,
+      "uncompressed": 926160,
+      "encoding": "br",
+      "webVitals": {
+        "ttfb": 92.6000000089407,
+        "fcp": 224,
+        "lcp": 224,
+        "inp": 16,
+        "cls": 0
+      },
+      "timings": {
+        "before": {
+          "scripting": 100.531,
+          "layout": 52.809,
+          "paint": 1.393
+        },
+        "after": {
+          "scripting": 57.227,
+          "layout": 2.508,
+          "paint": 134.299
+        }
+      }
     },
     "/mui": {
-      "compressed": 22977,
-      "uncompressed": 67997,
-      "encoding": "gzip"
+      "compressed": 22980,
+      "uncompressed": 68105,
+      "encoding": "br",
+      "webVitals": {
+        "ttfb": 79.30000001192093,
+        "fcp": 160,
+        "lcp": 160,
+        "inp": 32,
+        "cls": 0.13510837554931643
+      },
+      "timings": {
+        "before": {
+          "scripting": 93.681,
+          "layout": 17.244,
+          "paint": 1.214
+        },
+        "after": {
+          "scripting": 193.828,
+          "layout": 153.116,
+          "paint": 80.213
+        }
+      }
     }
   }
 }
