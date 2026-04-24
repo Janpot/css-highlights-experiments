@@ -523,25 +523,3 @@ main().catch((err) => {
   console.error(err);
   process.exit(1);
 });
-
-const SCREENSHOT_CONFIG = [
-  {
-    test: "docs/data/material/components/alert/TransitionAlerts",
-    enabled: false,
-  },
-  {
-    test: "docs/data/material/components/app-bar/BackToTop",
-    waitForSelector: ".foo-class",
-  },
-];
-
-const A11Y_CONFIG = [
-  {
-    test: /^docs\/data\/material\/components\/alert\/.+/,
-    enabled: false,
-  },
-  {
-    test: "docs/data/material/components/app-bar/BackToTop",
-    skipAssertions: [PARTIAL_CONTRAST],
-  },
-];

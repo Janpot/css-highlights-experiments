@@ -327,7 +327,7 @@ export default function Home() {
             <tr>
               <th rowSpan={2}>Variant</th>
               <th rowSpan={2}>Uncompressed HTML</th>
-              <th rowSpan={2}>gzip HTML</th>
+              <th rowSpan={2}>Compressed HTML</th>
               <th rowSpan={2}>TTFB (ms)</th>
               <th rowSpan={2}>FCP (ms)</th>
               <th rowSpan={2}>LCP (ms)</th>
@@ -378,7 +378,11 @@ export default function Home() {
                       <a href={r.href}>{r.variant}</a>
                     </td>
                     <td>{s ? formatBytes(s.uncompressed) : "—"}</td>
-                    <td>{s ? formatBytes(s.compressed) : "—"}</td>
+                    <td>
+                      {s
+                        ? `${formatBytes(s.compressed)}${s.encoding ? ` (${s.encoding})` : ""}`
+                        : "—"}
+                    </td>
                     <td>{formatMs(wv?.ttfb)}</td>
                     <td>{formatMs(wv?.fcp)}</td>
                     <td>{formatMs(wv?.lcp)}</td>
