@@ -1,5 +1,6 @@
 :root,
 .theme-light {
+  color-scheme: light;
   --page-bg: #ffffff;
   --page-fg: #1f2328;
   --rule: #d0d7de;
@@ -19,6 +20,7 @@
 }
 
 .theme-dark {
+  color-scheme: dark;
   --page-bg: #0d1117;
   --page-fg: #f0f6fc;
   --rule: #30363d;
@@ -38,6 +40,7 @@
 }
 
 .theme-dracula {
+  color-scheme: dark;
   --page-bg: #282a36;
   --page-fg: #f8f8f2;
   --rule: #44475a;

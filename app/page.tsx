@@ -165,6 +165,30 @@ function formatCls(n: number | null | undefined): string {
   return n.toFixed(3);
 }
 
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function Heading({
+  as: Tag,
+  children,
+}: {
+  as: "h2" | "h3";
+  children: string;
+}) {
+  const id = slugify(children);
+  return (
+    <Tag id={id}>
+      <a href={`#${id}`} className="anchor-link">
+        {children}
+      </a>
+    </Tag>
+  );
+}
+
 function YesNo({ value }: { value: boolean }) {
   return (
     <span
@@ -186,7 +210,7 @@ export default function Home() {
         token ranges are registered against named highlights.
       </p>
 
-      <h2>Usage</h2>
+      <Heading as="h2">Usage</Heading>
       <p>
         <code>&lt;CodeBlock&gt;</code> is a server component: it takes the
         source text and a Lezer parser, runs the parser at render time, and
@@ -215,7 +239,7 @@ export default function Home() {
         }
       />
 
-      <h2>Crossing the client boundary</h2>
+      <Heading as="h2">Crossing the client boundary</Heading>
       <p>What actually gets serialized is two fields:</p>
       <ul>
         <li>
@@ -235,7 +259,7 @@ export default function Home() {
         Highlight - no per-token object allocation, no spans in the DOM.
       </p>
 
-      <h2>Demos</h2>
+      <Heading as="h2">Demos</Heading>
       <ul>
         <li>
           <a href="/plain-text">/plain-text</a> - baseline:{" "}
@@ -285,7 +309,7 @@ export default function Home() {
         </li>
       </ul>
 
-      <h2>Comparison</h2>
+      <Heading as="h2">Comparison</Heading>
       <p>
         Sizes are real HTTP response bodies. <code>pnpm measure</code> runs{" "}
         <code>next build</code>, starts <code>next start</code> on port 3100,
@@ -333,11 +357,15 @@ export default function Home() {
               <th>Paint</th>
             </tr>
           </thead>
-          {GROUPS.map((g) => (
+          {GROUPS.map((g) => {
+            const groupId = `group-${slugify(g.label)}`;
+            return (
             <tbody key={g.label}>
               <tr>
-                <th colSpan={18} scope="colgroup">
-                  {g.label}
+                <th id={groupId} colSpan={18} scope="colgroup">
+                  <a href={`#${groupId}`} className="anchor-link">
+                    {g.label}
+                  </a>
                 </th>
               </tr>
               {g.rows.map((r) => {
@@ -382,7 +410,8 @@ export default function Home() {
                 );
               })}
             </tbody>
-          ))}
+            );
+          })}
         </table>
       </div>
       <p style={{ fontSize: "0.9em", opacity: 0.7 }}>
@@ -392,8 +421,19 @@ export default function Home() {
         the Node runner, and a synthetic click + tab keystroke trigger INP.
         Numbers reflect unthrottled local rendering.
       </p>
+      <p style={{ fontSize: "0.9em", opacity: 0.7 }}>
+        The Before/After scroll timings come from a Chrome DevTools Protocol{" "}
+        <code>Tracing</code> session over the same Playwright run. The page is
+        loaded and left to settle, a <code>performance.mark</code> delimits the
+        &quot;before scroll&quot; window, the runner scrolls through the page
+        to the bottom and back, and a second mark closes the &quot;after
+        scroll&quot; window. Trace events are bucketed by self-time into
+        Script (JS execution, parsing, compile), Layout (style recalc,
+        layout), and Paint (paint, composite, raster) - so you can see how
+        much work each variant does at first render vs. during scroll.
+      </p>
 
-      <h2>Trade-offs of the CSS Custom Highlight API</h2>
+      <Heading as="h2">Trade-offs of the CSS Custom Highlight API</Heading>
       <ul>
         <li>
           A token is assigned to a single highlight - you can't combine class

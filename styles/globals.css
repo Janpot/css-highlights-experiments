@@ -1,3 +1,9 @@
+:root {
+  --page-gutter: 24px;
+  --text-max-width: 900px;
+  --table-max-width: 1400px;
+}
+
 *,
 *::before,
 *::after {
@@ -19,9 +25,9 @@ body {
 }
 
 main {
-  max-width: 900px;
+  max-width: var(--text-max-width);
   margin: 0 auto;
-  padding: 32px 24px 240px;
+  padding: 32px var(--page-gutter) 240px;
 }
 
 h1 {
@@ -47,7 +53,7 @@ nav.site {
   display: flex;
   gap: 16px;
   align-items: center;
-  padding: 12px 24px;
+  padding: 12px var(--page-gutter);
   border-bottom: 1px solid var(--rule);
   background: var(--page-bg);
   position: sticky;
@@ -152,8 +158,27 @@ label.toggle {
   background: color-mix(in srgb, currentColor 10%, transparent);
 }
 
+.anchor-link,
+.anchor-link:visited {
+  color: inherit;
+  text-decoration: none;
+}
+.anchor-link:hover {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+}
+:target {
+  scroll-margin-top: 64px;
+}
+
 .table-scroll {
   overflow-x: auto;
+  width: min(100vw - 2 * var(--page-gutter), var(--table-max-width));
+  margin-left: calc(
+    50% - min(50vw - var(--page-gutter), var(--table-max-width) / 2)
+  );
+  box-sizing: border-box;
 }
 
 table {
@@ -208,4 +233,9 @@ table tbody tr:first-child th {
   text-transform: uppercase;
   letter-spacing: 0.04em;
   padding-top: 0.6rem;
+}
+
+table tbody tr:hover td,
+table tbody tr:hover th:not([scope="colgroup"]) {
+  background: color-mix(in srgb, currentColor 4%, transparent);
 }
