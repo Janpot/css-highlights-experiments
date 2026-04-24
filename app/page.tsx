@@ -423,7 +423,8 @@ export default function Home() {
         <code>pnpm measure</code> via Playwright: each variant is loaded in a
         real Chromium page, <code>useReportWebVitals</code> forwards metrics to
         the Node runner, and a synthetic click + tab keystroke trigger INP.
-        Numbers reflect unthrottled local rendering.
+        Each variant is measured across 20 runs and the table shows the 75th
+        percentile. Numbers reflect unthrottled local rendering.
       </p>
       <p style={{ fontSize: "0.9em", opacity: 0.7 }}>
         The Before/After scroll timings come from a Chrome DevTools Protocol{" "}
@@ -434,7 +435,8 @@ export default function Home() {
         scroll&quot; window. Trace events are bucketed by self-time into
         Script (JS execution, parsing, compile), Layout (style recalc,
         layout), and Paint (paint, composite, raster) - so you can see how
-        much work each variant does at first render vs. during scroll.
+        much work each variant does at first render vs. during scroll. Each
+        variant runs 20 times and the table shows the 75th percentile.
       </p>
 
       <Heading as="h2">Trade-offs of the CSS Custom Highlight API</Heading>

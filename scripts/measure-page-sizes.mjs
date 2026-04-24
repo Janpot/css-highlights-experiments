@@ -23,7 +23,7 @@ const projectRoot = resolve(here, "..");
 
 const argBase = process.argv[2] || process.env.BASE_URL || null;
 const argPort = Number(process.env.PORT || 3100);
-const RUNS = Math.max(1, Number(process.env.RUNS || 3));
+const RUNS = Math.max(1, Number(process.env.RUNS || 20));
 
 function fetchMeasured(url) {
   return new Promise((resolvePromise, reject) => {
@@ -166,7 +166,7 @@ async function main() {
     }
 
     console.log("");
-    console.log(`web-vitals pass (median of ${RUNS}) ...`);
+    console.log(`web-vitals pass (p75 of ${RUNS}) ...`);
     for (const path of PATHS) {
       if (!results[path]) continue;
       const url = base + path;
@@ -176,7 +176,7 @@ async function main() {
         for (let i = 0; i < RUNS; i++) {
           samples.push(await collectWebVitals(browser, url));
         }
-        const wv = medianWebVitals(samples);
+        const wv = p75WebVitals(samples);
         results[path].webVitals = wv;
         console.log(
           `ttfb=${fmt(wv.ttfb)} fcp=${fmt(wv.fcp)} lcp=${fmt(wv.lcp)} ` +
@@ -187,7 +187,7 @@ async function main() {
       }
     }
 
-    console.log(`\ntracing pass (median of ${RUNS}) ...`);
+    console.log(`\ntracing pass (p75 of ${RUNS}) ...`);
     for (const path of PATHS) {
       if (!results[path]) continue;
       const url = base + path;
@@ -197,7 +197,7 @@ async function main() {
         for (let i = 0; i < RUNS; i++) {
           samples.push(await collectTimingBreakdown(browser, url));
         }
-        const tr = medianTimings(samples);
+        const tr = p75Timings(samples);
         results[path].timings = tr;
         console.log(
           `before[s=${fmt(tr.before.scripting)} l=${fmt(tr.before.layout)} p=${fmt(tr.before.paint)}] ` +
@@ -230,27 +230,35 @@ async function main() {
   }
 }
 
-function median(xs) {
+function percentile(xs, p) {
   const arr = xs.filter((x) => x != null && Number.isFinite(x));
   if (arr.length === 0) return null;
   arr.sort((a, b) => a - b);
-  const mid = arr.length >> 1;
-  return arr.length % 2 ? arr[mid] : (arr[mid - 1] + arr[mid]) / 2;
+  // Linear interpolation between closest ranks.
+  const rank = (arr.length - 1) * p;
+  const lo = Math.floor(rank);
+  const hi = Math.ceil(rank);
+  if (lo === hi) return arr[lo];
+  return arr[lo] + (arr[hi] - arr[lo]) * (rank - lo);
 }
 
-function medianWebVitals(samples) {
+function p75(xs) {
+  return percentile(xs, 0.75);
+}
+
+function p75WebVitals(samples) {
   return {
-    ttfb: median(samples.map((s) => s.ttfb)),
-    fcp: median(samples.map((s) => s.fcp)),
-    lcp: median(samples.map((s) => s.lcp)),
-    inp: median(samples.map((s) => s.inp)),
-    cls: median(samples.map((s) => s.cls)),
+    ttfb: p75(samples.map((s) => s.ttfb)),
+    fcp: p75(samples.map((s) => s.fcp)),
+    lcp: p75(samples.map((s) => s.lcp)),
+    inp: p75(samples.map((s) => s.inp)),
+    cls: p75(samples.map((s) => s.cls)),
   };
 }
 
-function medianTimings(samples) {
+function p75Timings(samples) {
   const pick = (phase, key) =>
-    median(samples.map((s) => s[phase]?.[key] ?? null));
+    p75(samples.map((s) => s[phase]?.[key] ?? null));
   return {
     before: {
       scripting: pick("before", "scripting"),
