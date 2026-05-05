@@ -158,6 +158,19 @@ label.toggle {
   background: color-mix(in srgb, currentColor 10%, transparent);
 }
 
+.mui-code .frame {
+  display: block;
+}
+
+.mui-code .frame[data-lined] {
+  white-space: normal;
+}
+
+.mui-code .frame[data-lined] .line {
+  display: block;
+  white-space: pre;
+}
+
 .anchor-link,
 .anchor-link:visited {
   color: inherit;
