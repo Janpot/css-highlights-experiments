@@ -1,0 +1,1 @@
+Hello, this is the target file for the symlink test.
